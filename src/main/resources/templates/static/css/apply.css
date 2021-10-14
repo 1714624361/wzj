@@ -1,0 +1,13 @@
+.ziti{
+    font-size: 16px;
+}
+
+@media screen  and (max-width: 320px) {
+    .ziti{
+        font-size: 15px;
+    }
+}
+
+/*#boda{*/
+    /*padding: 20px;*/
+/*}*/

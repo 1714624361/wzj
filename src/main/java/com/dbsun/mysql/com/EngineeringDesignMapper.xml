@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dbsun.mapper.com.EngineeringDesignMapper">
+	<!--工程设计-->
+
+	<sql id="Base_Column_List" >
+        ed.id, 
+        ed.task, 
+        ed.apply_user_id, 
+        ed.apply_user_name, 
+        ed.status, 
+        ed.create_time, 
+        ed.user_id, 
+        ed.feasibility_study_report, 
+        ed.opinion, 
+        ed.construction_bidding
+    </sql>
+
+	<sql id="Base_Column_List_1" >
+        ed.id ed_id, 
+        ed.task ed_task, 
+        ed.apply_user_id ed_apply_user_id, 
+        ed.apply_user_name ed_apply_user_name, 
+        ed.status ed_status, 
+        ed.create_time ed_create_time, 
+        ed.user_id ed_user_id, 
+        ed.feasibility_study_report ed_feasibility_study_report, 
+        ed.opinion ed_opinion, 
+        ed.construction_bidding ed_construction_bidding
+    </sql>
+
+    <select id="getEngineeringDesignByColumn" parameterType="pd" resultType="pd"  >
+        select 
+            <include refid="Base_Column_List" />
+        from engineering_design ed
+        where 1 = 1
+        <if test="id != null" >
+            and ed.id = #{id} 
+        </if>
+        <if test="task != null" >
+            and ed.task = #{task} 
+        </if>
+        <if test="apply_user_id != null" >
+            and ed.apply_user_id = #{apply_user_id} 
+        </if>
+        <if test="apply_user_name != null" >
+            and ed.apply_user_name = #{apply_user_name} 
+        </if>
+        <if test="status != null" >
+            and ed.status = #{status} 
+        </if>
+        <if test="create_time != null" >
+            and ed.create_time = #{create_time} 
+        </if>
+        <if test="user_id != null" >
+            and ed.user_id = #{user_id} 
+        </if>
+        <if test="feasibility_study_report != null" >
+            and ed.feasibility_study_report = #{feasibility_study_report} 
+        </if>
+        <if test="opinion != null" >
+            and ed.opinion = #{opinion} 
+        </if>
+        <if test="construction_bidding != null" >
+            and ed.construction_bidding = #{construction_bidding} 
+        </if>
+    </select>
+
+    <delete id="deleteEngineeringDesignByColumn" parameterType="pd" >
+        delete from engineering_design
+        where 1 = 1
+        <if test="id != null and id != ''" >
+            and id = #{id} 
+        </if>
+        <if test="task != null and task != ''" >
+            and task = #{task} 
+        </if>
+        <if test="apply_user_id != null and apply_user_id != ''" >
+            and apply_user_id = #{apply_user_id} 
+        </if>
+        <if test="apply_user_name != null and apply_user_name != ''" >
+            and apply_user_name = #{apply_user_name} 
+        </if>
+        <if test="status != null and status != ''" >
+            and status = #{status} 
+        </if>
+        <if test="create_time != null and create_time != ''" >
+            and create_time = #{create_time} 
+        </if>
+        <if test="user_id != null and user_id != ''" >
+            and user_id = #{user_id} 
+        </if>
+        <if test="feasibility_study_report != null and feasibility_study_report != ''" >
+            and feasibility_study_report = #{feasibility_study_report} 
+        </if>
+        <if test="opinion != null and opinion != ''" >
+            and opinion = #{opinion} 
+        </if>
+        <if test="construction_bidding != null and construction_bidding != ''" >
+            and construction_bidding = #{construction_bidding} 
+        </if>
+    </delete>
+
+    <insert id="addEngineeringDesign" parameterType="pd" >
+        insert into engineering_design (
+            task, 
+            apply_user_id, 
+            apply_user_name, 
+            status, 
+            create_time, 
+            user_id, 
+            feasibility_study_report, 
+            opinion, 
+            construction_bidding
+        )
+        values (
+            #{task}, 
+            #{apply_user_id}, 
+            #{apply_user_name}, 
+            #{status}, 
+            now(), 
+            #{user_id}, 
+            #{feasibility_study_report}, 
+            #{opinion}, 
+            #{construction_bidding}
+        )
+    </insert>
+
+    <insert id="addEngineeringDesignSelective" parameterType="pd" >
+        insert into engineering_design
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null and id != ''" >
+                id, 
+            </if>
+            <if test="task != null and task != ''" >
+                task, 
+            </if>
+            <if test="apply_user_id != null and apply_user_id != ''" >
+                apply_user_id, 
+            </if>
+            <if test="apply_user_name != null and apply_user_name != ''" >
+                apply_user_name, 
+            </if>
+            <if test="status != null and status != ''" >
+                status, 
+            </if>
+            <if test="create_time != null and create_time != ''" >
+                create_time, 
+            </if>
+            <if test="user_id != null and user_id != ''" >
+                user_id, 
+            </if>
+            <if test="feasibility_study_report != null and feasibility_study_report != ''" >
+                feasibility_study_report, 
+            </if>
+            <if test="opinion != null and opinion != ''" >
+                opinion, 
+            </if>
+            <if test="construction_bidding != null and construction_bidding != ''" >
+                construction_bidding, 
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test=" id != null and id != ''" >
+                #{id}, 
+            </if>
+            <if test=" task != null and task != ''" >
+                #{task}, 
+            </if>
+            <if test=" apply_user_id != null and apply_user_id != ''" >
+                #{apply_user_id}, 
+            </if>
+            <if test=" apply_user_name != null and apply_user_name != ''" >
+                #{apply_user_name}, 
+            </if>
+            <if test=" status != null and status != ''" >
+                #{status}, 
+            </if>
+            <if test=" create_time != null and create_time != ''" >
+                #{create_time}, 
+            </if>
+            <if test=" user_id != null and user_id != ''" >
+                #{user_id}, 
+            </if>
+            <if test=" feasibility_study_report != null and feasibility_study_report != ''" >
+                #{feasibility_study_report}, 
+            </if>
+            <if test=" opinion != null and opinion != ''" >
+                #{opinion}, 
+            </if>
+            <if test=" construction_bidding != null and construction_bidding != ''" >
+                #{construction_bidding}, 
+            </if>
+        </trim>
+    </insert>
+
+	<!--循环批量插入-->
+	<insert id="addEngineeringDesignBatch" parameterType="pd" >
+		insert into engineering_design (
+			id, 
+			task, 
+			apply_user_id, 
+			apply_user_name, 
+			status, 
+			create_time, 
+			user_id, 
+			feasibility_study_report, 
+			opinion, 
+			construction_bidding
+		)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(
+				(select REPLACE(uuid(), '-', '')),
+				#{item.task}, 
+				#{item.apply_user_id}, 
+				#{item.apply_user_name}, 
+				#{item.status}, 
+				#{item.create_time}, 
+				#{item.user_id}, 
+				#{item.feasibility_study_report}, 
+				#{item.opinion}, 
+				#{item.construction_bidding}
+			)
+		</foreach>
+	</insert>
+
+    <update id="updateEngineeringDesignByid" parameterType="pd" >
+        update engineering_design
+        <set>
+            <if test="task != null and task != '' " >
+               task = #{task}, 
+            </if>
+            <if test="apply_user_id != null and apply_user_id != '' " >
+               apply_user_id = #{apply_user_id}, 
+            </if>
+            <if test="apply_user_name != null and apply_user_name != '' " >
+               apply_user_name = #{apply_user_name}, 
+            </if>
+            <if test="status != null and status != '' " >
+               status = #{status}, 
+            </if>
+            <if test="create_time != null and create_time != '' " >
+               create_time = #{create_time}, 
+            </if>
+            <if test="user_id != null and user_id != '' " >
+               user_id = #{user_id}, 
+            </if>
+            <if test="feasibility_study_report != null and feasibility_study_report != '' " >
+               feasibility_study_report = #{feasibility_study_report}, 
+            </if>
+            <if test="opinion != null and opinion != '' " >
+               opinion = #{opinion}, 
+            </if>
+            <if test="construction_bidding != null and construction_bidding != '' " >
+               construction_bidding = #{construction_bidding}, 
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateEngineeringDesignByColumn" parameterType="pd" >
+        update engineering_design
+        <set>
+            <if test="task != null and task != '' " >
+               task = #{task}, 
+            </if>
+            <if test="apply_user_id != null and apply_user_id != '' " >
+               apply_user_id = #{apply_user_id}, 
+            </if>
+            <if test="apply_user_name != null and apply_user_name != '' " >
+               apply_user_name = #{apply_user_name}, 
+            </if>
+            <if test="status != null and status != '' " >
+               status = #{status}, 
+            </if>
+            <if test="create_time != null and create_time != '' " >
+               create_time = #{create_time}, 
+            </if>
+            <if test="user_id != null and user_id != '' " >
+               user_id = #{user_id}, 
+            </if>
+            <if test="feasibility_study_report != null and feasibility_study_report != '' " >
+               feasibility_study_report = #{feasibility_study_report}, 
+            </if>
+            <if test="opinion != null and opinion != '' " >
+               opinion = #{opinion}, 
+            </if>
+            <if test="construction_bidding != null and construction_bidding != '' " >
+               construction_bidding = #{construction_bidding}, 
+            </if>
+        </set>
+       where 1 = 1 
+       <if test="id_Q != null and id_Q != '' " >
+            and id = #{id_Q} 
+       </if>
+       <if test="task_Q != null and task_Q != '' " >
+            and task = #{task_Q} 
+       </if>
+       <if test="apply_user_id_Q != null and apply_user_id_Q != '' " >
+            and apply_user_id = #{apply_user_id_Q} 
+       </if>
+       <if test="apply_user_name_Q != null and apply_user_name_Q != '' " >
+            and apply_user_name = #{apply_user_name_Q} 
+       </if>
+       <if test="status_Q != null and status_Q != '' " >
+            and status = #{status_Q} 
+       </if>
+       <if test="create_time_Q != null and create_time_Q != '' " >
+            and create_time = #{create_time_Q} 
+       </if>
+       <if test="user_id_Q != null and user_id_Q != '' " >
+            and user_id = #{user_id_Q} 
+       </if>
+       <if test="feasibility_study_report_Q != null and feasibility_study_report_Q != '' " >
+            and feasibility_study_report = #{feasibility_study_report_Q} 
+       </if>
+       <if test="opinion_Q != null and opinion_Q != '' " >
+            and opinion = #{opinion_Q} 
+       </if>
+       <if test="construction_bidding_Q != null and construction_bidding_Q != '' " >
+            and construction_bidding = #{construction_bidding_Q} 
+       </if>
+    </update>
+
+    <select id="getPageEngineeringDesignList" parameterType="page" resultType="pd" useCache="false">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM engineering_design ed
+        where 1 = 1
+        <if test="pd.id != null and pd.id != ''" >
+            and ed.id = #{pd.id} 
+        </if>
+        <if test="pd.task != null and pd.task != ''" >
+            and ed.task = #{pd.task} 
+        </if>
+        <if test="pd.apply_user_id != null and pd.apply_user_id != ''" >
+            and ed.apply_user_id = #{pd.apply_user_id} 
+        </if>
+        <if test="pd.apply_user_name != null and pd.apply_user_name != ''" >
+            and ed.apply_user_name = #{pd.apply_user_name} 
+        </if>
+        <if test="pd.status != null and pd.status != ''" >
+            and ed.status = #{pd.status} 
+        </if>
+        <if test="pd.create_time != null and pd.create_time != ''" >
+            and ed.create_time = #{pd.create_time} 
+        </if>
+        <if test="pd.user_id != null and pd.user_id != ''" >
+            and ed.user_id = #{pd.user_id} 
+        </if>
+        <if test="pd.feasibility_study_report != null and pd.feasibility_study_report != ''" >
+            and ed.feasibility_study_report = #{pd.feasibility_study_report} 
+        </if>
+        <if test="pd.opinion != null and pd.opinion != ''" >
+            and ed.opinion = #{pd.opinion} 
+        </if>
+        <if test="pd.construction_bidding != null and pd.construction_bidding != ''" >
+            and ed.construction_bidding = #{pd.construction_bidding} 
+        </if>
+    </select>
+
+    <select id="getEngineeringDesignList" parameterType="pd" resultType="pd" useCache="false">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM engineering_design ed
+        where 1 = 1
+        <if test="id != null and id != ''" >
+            and ed.id = #{id} 
+        </if>
+        <if test="task != null and task != ''" >
+            and ed.task = #{task} 
+        </if>
+        <if test="apply_user_id != null and apply_user_id != ''" >
+            and ed.apply_user_id = #{apply_user_id} 
+        </if>
+        <if test="apply_user_name != null and apply_user_name != ''" >
+            and ed.apply_user_name = #{apply_user_name} 
+        </if>
+        <if test="status != null and status != ''" >
+            and ed.status = #{status} 
+        </if>
+        <if test="create_time != null and create_time != ''" >
+            and ed.create_time = #{create_time} 
+        </if>
+        <if test="user_id != null and user_id != ''" >
+            and ed.user_id = #{user_id} 
+        </if>
+        <if test="feasibility_study_report != null and feasibility_study_report != ''" >
+            and ed.feasibility_study_report = #{feasibility_study_report} 
+        </if>
+        <if test="opinion != null and opinion != ''" >
+            and ed.opinion = #{opinion} 
+        </if>
+        <if test="construction_bidding != null and construction_bidding != ''" >
+            and ed.construction_bidding = #{construction_bidding} 
+        </if>
+    </select>
+
+    <!--<update id="updateEngineeringDesignBatch" parameterType="pd" >
+		<foreach close=";" collection="list" index="index" item="item" open="" separator=";">
+			update engineering_design
+			<trim prefix="set" suffixOverrides=",">
+				<if test="item.task != null and item.task != '' " >
+					task = #{item.task}, 
+				</if>
+				<if test="item.apply_user_id != null and item.apply_user_id != '' " >
+					apply_user_id = #{item.apply_user_id}, 
+				</if>
+				<if test="item.apply_user_name != null and item.apply_user_name != '' " >
+					apply_user_name = #{item.apply_user_name}, 
+				</if>
+				<if test="item.status != null and item.status != '' " >
+					status = #{item.status}, 
+				</if>
+				<if test="item.create_time != null and item.create_time != '' " >
+					create_time = #{item.create_time}, 
+				</if>
+				<if test="item.user_id != null and item.user_id != '' " >
+					user_id = #{item.user_id}, 
+				</if>
+				<if test="item.feasibility_study_report != null and item.feasibility_study_report != '' " >
+					feasibility_study_report = #{item.feasibility_study_report}, 
+				</if>
+				<if test="item.opinion != null and item.opinion != '' " >
+					opinion = #{item.opinion}, 
+				</if>
+				<if test="item.construction_bidding != null and item.construction_bidding != '' " >
+					construction_bidding = #{item.construction_bidding}, 
+				</if>
+			</trim>
+			where 1 = 1 
+			<if test="item.id_Q != null and item.id_Q != '' " >
+				and id = #{item.id_Q} 
+			</if>
+			<if test="item.task_Q != null and item.task_Q != '' " >
+				and task = #{item.task_Q} 
+			</if>
+			<if test="item.apply_user_id_Q != null and item.apply_user_id_Q != '' " >
+				and apply_user_id = #{item.apply_user_id_Q} 
+			</if>
+			<if test="item.apply_user_name_Q != null and item.apply_user_name_Q != '' " >
+				and apply_user_name = #{item.apply_user_name_Q} 
+			</if>
+			<if test="item.status_Q != null and item.status_Q != '' " >
+				and status = #{item.status_Q} 
+			</if>
+			<if test="item.create_time_Q != null and item.create_time_Q != '' " >
+				and create_time = #{item.create_time_Q} 
+			</if>
+			<if test="item.user_id_Q != null and item.user_id_Q != '' " >
+				and user_id = #{item.user_id_Q} 
+			</if>
+			<if test="item.feasibility_study_report_Q != null and item.feasibility_study_report_Q != '' " >
+				and feasibility_study_report = #{item.feasibility_study_report_Q} 
+			</if>
+			<if test="item.opinion_Q != null and item.opinion_Q != '' " >
+				and opinion = #{item.opinion_Q} 
+			</if>
+			<if test="item.construction_bidding_Q != null and item.construction_bidding_Q != '' " >
+				and construction_bidding = #{item.construction_bidding_Q} 
+			</if>
+		</foreach>
+    </update>-->
+</mapper>

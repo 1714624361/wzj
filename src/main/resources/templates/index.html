@@ -1,0 +1,2172 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="renderer" content="webkit"/>
+
+    <title> 后台管理系统- 主页</title>
+
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+
+    <link rel="stylesheet" href="static/element-ui/lib/theme-chalk/index.css">
+
+
+    <script src="static/js/vue.js"></script>
+    <script src="static/element-ui/lib/index.js"></script>
+    <script src="static/js/jquery.min.js"></script>
+<!--    <script src="static/js/jquery-1.11.1.min.js"></script>-->
+
+    <style>
+    	.el-tabs__header{
+    		margin-bottom:0 !important;
+    		background-color:#f1f7fe;
+    	}
+/*
+    	.active{
+    		background-color:#fff !important;
+    	}
+    	.nav-label{
+    		color:#bed3eb !important;
+    	}
+    	.J_menuItem i{
+    		color:#bed3eb !important;
+    	}
+        .nini a:link{
+            background-color: #fff !important;
+        }
+        .nini a:link i,.nini a:link span{
+            color:#bed3eb  !important;
+        }
+        .navbar-default .nav > li > a:hover, .navbar-default .nav > li > a:focus {
+            color:#4aa5fb !important;
+            background-color: #f1f7fe !important;
+        }
+        .nini a:hover{
+            background-color: #4aa5fb !important;
+        }
+        .nini a:hover i,.nini a:hover span{
+            color:#fff  !important;
+        }
+*/
+        .navbar-static-top{
+            margin-bottom: 0 !important;
+        }
+        #loginOut:hover{
+            background-color: inherit !important;
+        }
+        #editPwd:hover{
+            background-color: inherit !important;
+        }
+        .el-tabs__nav .el-tabs__item:nth-child(1) span{
+            display: none;
+        }
+        .callinDiv{
+            text-align: center;
+            margin: 10px 0;
+        }
+        .callState{
+            width: 20px;
+            margin-left: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        @keyframes ripple {
+            0% {
+                width:10px;
+                height:10px;
+            }
+            100% {
+                width:30px;
+                height:30px;
+            }
+        }
+        .el-table tr{
+            background-color: #4AA5FB !important;
+            color:#fff !important;
+        }
+        .el-table .evrow {
+            background: #ffffff !important;
+            color:#000 !important;
+        }
+        .el-table td, .el-table th{
+            padding: 4px 0 !important;
+        }
+        .action{
+            -webkit-animation-name:'ripple';/*动画属性名，也就是我们前面keyframes定义的动画名*/
+            -webkit-animation-duration: 2s;/*动画持续时间*/
+            -webkit-animation-timing-function: ease; /*动画频率，和transition-timing-function是一样的*/
+            -webkit-animation-delay: 0s;/*动画延迟时间*/
+            -webkit-animation-iteration-count: infinite;/*定义循环资料，infinite为无限次*/
+            -webkit-animation-direction: alternate;/*定义动画方式*/
+        }
+        .gcallyx{
+            width: 400px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #c8c8c8;
+        }
+        .gcallyx_t{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .gcallyx_t span{
+            color: #000;
+            font-weight: 600;
+        }
+        .gcallin .el-dialog__header{
+            background-color: #72bbff;
+        }
+        .gcallin .el-dialog__title{
+            margin-left: 225px;
+            color: #fff;
+        }
+        .gcallin .el-dialog__headerbtn .el-dialog__close{
+            color: #fff;
+        }
+
+        .gcallin0 .el-dialog__header{
+            background-color: #64e4a8;
+        }
+        .gcallin0 .el-dialog__title{
+            margin-left: 225px;
+            color: #fff;
+        }
+        .gcallin0 .el-dialog__headerbtn .el-dialog__close{
+            color: #fff;
+        }
+
+
+        .gcallin_t{
+            width: 400px;
+            padding: 10px;
+            margin: auto;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .gcallin_t_user{
+            width: 60px;
+            height: 60px;
+            margin-right: 15px;
+        }
+        .gcallin_t_user div{
+            width: 60px;
+            text-align: center;
+            color: #fff;
+            font-size: 12px;
+            margin: 5px 0;
+        }
+        .gcallin_t_user img{
+            width: 20px;
+            height: 20px;
+        }
+        .gcallin_t_name div:first-child{
+            font-size: 18px;
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 10px;
+        }
+        .gcallin_t_name div:last-child{
+            font-size: 16px;
+        }
+        .gcallin_t_c{
+          flex-grow: 1;
+          text-align: right;
+          font-weight: 600;
+          font-size:16px;
+        }
+        .gcallin_c{
+            width: 510px;
+            margin:auto;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .gcallin_i{
+            width: 400px;
+            margin: auto;
+            padding: 5px 60px;
+        }
+        .gcallin_i i{
+            font-size: 20px;
+            color: #54de9e;
+        }
+        .gcallin_cl{
+            width: 140px;
+            height: 40px;
+            font-size: 14px;
+            color:#fff;
+            border-radius: 4px;
+            background-color: #0fda7b;
+            text-align: center;
+            line-height: 40px;
+            cursor: pointer;
+        }
+        .gcallin_cl10{
+            width: 140px;
+            height: 40px;
+            font-size: 14px;
+            color:#fff;
+            border-radius: 4px;
+            background-color: #ccc;
+            text-align: center;
+            line-height: 40px;
+            cursor: pointer;
+        }
+        .gcallin_cr{
+            display: flex;
+            align-items: center;
+        }
+        .gcallin_cr div:first-child{
+            width: 70px;
+            height: 40px;
+            font-size: 14px;
+            color:#fff;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius:4px;
+            background-color: #ff554c;
+            text-align: center;
+            line-height: 40px;
+            margin-right: 1px;
+            cursor: pointer;
+        }
+        .gcallin_cr div:last-child{
+            width: 70px;
+            height: 40px;
+            font-size: 14px;
+            color:#fff;
+            border-top-right-radius: 4px;
+            border-bottom-right-radius:4px;
+            background-color: #ff974c;
+            text-align: center;
+            line-height: 40px;
+            cursor: pointer;
+        }
+
+        .callDesk{
+            position: fixed;
+            left: 0;
+            bottom: 80px;
+            width: 100%;
+            height: auto;
+        }
+        .callDeskc{
+            width: 600px;
+            height: 70px;
+            /* background-color: #ccc; */
+            background: linear-gradient(to top, #333, rgba(0,0,0,.2));
+            border-radius: 6px;
+            box-shadow: 0 0 20px rgba(0,0,0,.5);
+            margin: auto;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+        }
+        .el-popover{
+            padding: 0 !important;
+        }
+        .callDeskcDiv{
+            width: 80px;
+            text-align: center;
+            color: #fff;
+        }
+        .callDeskcDiv img{
+            width: 28px;
+            height: 28px;
+        }
+        .callDeskcDiv div:first-child {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            background-color: #72bbff;
+            cursor:pointer;
+            margin: auto;
+            padding-top: 2px;
+            text-align: center;
+        }
+        .callDeskcDiv div{
+            margin: 2px 0;
+            font-size: 12px;
+        }
+        .callDeskr{
+            width: 100px;
+            text-align: center;
+            color: #fff;
+        }
+        .callDeskr div{
+            margin: 2px 0;
+            font-size: 12px;
+        }
+        .callDeskr div:first-child{
+            width: 50px;
+            height: 42px;
+            border-radius: 4px;
+            background-color: #72bbff;
+            cursor:pointer;
+            margin: auto;
+            padding-top: 4px;
+            text-align: center;
+        }
+        .callDeskr img{
+            width: 35px;
+            height: 35px;
+        }
+        .callDeskLine{
+            width: 2px;
+            height: 100%;
+            /* background-color: rgba(180,180,180,1); */
+        }
+        .callDeskLineL{
+            -moz-box-shadow:2px 0px 6px #333333;
+            -webkit-box-shadow:2px 0px 6px #333333;
+            box-shadow:2px 0px 6px #333333;
+        }
+        .callDeskLineR{
+            -moz-box-shadow:-2px 0px 6px #333333;
+            -webkit-box-shadow:-2px 0px 6px #333333;
+            box-shadow:-2px 0px 6px #333333;
+        }
+        .callDeskMin{
+            height: 100%;
+            width: 30px;
+            text-align: center;
+            padding-top: 5px;
+        }
+        .callDeskMin img{
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+        .callDesk0{
+            width: 100px;
+            height: 80px;
+            position: fixed;
+            left: 225px;
+            bottom: 10px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,.5);
+            cursor: pointer;
+        }
+        .callDesk0 div:first-child{
+            text-align: right;
+        }
+        .callDesk0 div:first-child img{
+            width: 12px;
+            height: 12px;
+            margin: 4px 10px;
+        }
+        .callDesk0 div:last-child{
+            text-align: center;
+        }
+        .callDesk0 div:last-child img{
+            width: 55px;
+            height: 50px;
+        }
+        .callDeskRcd{
+            text-align: center;
+        }
+        .el-popover{
+            border: 6px solid #ccc;
+        }
+        .navbar-header{
+            width: 45% !important;
+        }
+        .callStateDiv{
+            width: 150px;
+            height: 40px;
+            line-height: 40px;
+            border-radius: 2px;
+            background-color: rgba(255,255,255,0.2);
+            text-align: center;
+            color: #fff;
+        }
+        .callStateDiv img{
+            width: 30px;
+            margin: -2px 10px 0 0;
+        }
+        .callStateDiv span{
+            letter-spacing: 2px;
+        }
+        @keyframes move{
+            0%{
+                transform:translateY(0px);
+            }
+            100%{
+                transform:translateY(-110px);
+            }
+        }
+        .picTab{
+            height: 40px;
+            color:#fff;
+            font-size:14px;
+            margin-top:10px;
+            overflow: hidden;
+        }
+        .picTab ul{
+            margin:0;
+            padding:0;
+            list-style:none;
+            height:40px;
+        }
+        .picTab li{
+            height:22px;
+        }
+        .picTab:hover ul{
+            animation-play-state:paused;
+        }
+
+        .codeDialog .el-dialog__body{
+            padding: 0 !important;
+        }
+
+        /* 2019.6.26更改websocket消息提醒 */
+        .note{
+            width: 340px;
+            color: red;
+        }
+        .note div:nth-child(3){
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: 10px;
+        }
+        .note span{
+            display: inline-block;
+            width: 60px;
+            height: 25px;
+            text-align: center;
+            color: #fff;
+            line-height: 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: red;
+        }
+        .noteTop{
+            width: 340px;
+            height: 25px;
+            line-height: 25px;
+            background-color: red;
+            text-align: center;
+            color: #fff;
+        }
+        .note div:nth-child(2){
+            padding: 5px 10px;
+        }
+        .el-notification__group{
+            margin: 0;
+        }
+        .el-notification__content{
+            margin: 0;
+        }
+        .el-notification{
+            padding: 0;
+            border: 0;
+        }
+        .el-notification__closeBtn {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            cursor: pointer;
+            color: #909399;
+            font-size: 16px;
+        }
+        .el-notification__closeBtn{
+            color: #fff;
+        }
+        .noteClass1{
+            color: green;
+        }
+        .noteClass1 .noteTop{
+            background-color: green;
+        }
+        .noteClass1 span{
+            background-color: green;
+        }
+    </style>
+</head>
+
+<body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
+        <div id="wrapper">
+        <!--左侧导航开始-->
+        <nav class="navbar-default navbar-static-side" role="navigation"  style="box-shadow: 5px 0 5px rgba(0,0,0,.2);">
+            <div class="nav-close"><i class="fa fa-times-circle"></i>
+            </div>
+            <div class="sidebar-collapse" style="height: 100%;overflow: auto;">
+                <ul class="nav" id="side-menu">
+                    <li class="nav-header">
+                        <div class="dropdown profile-element">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <span class="clear">
+                                    <span class="block m-t-xs" style="font-size:20px;text-align: center;">
+                                        管理系统
+<!--                                        <img src="static/img/newCrmLogo.png">-->
+                                    </span>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="logo-element">管理系统
+                        </div>
+                    </li>
+
+                    <li class="nini">
+                        <a class="J_menuItem" href="javascript:" onclick="getMenu(this)"  name="index_v1.html">
+                            <i class="fa fa-home"></i>
+                            <span class="nav-label">主页</span>
+                        </a>
+                    </li>
+                    <!-- 遍历菜单开始... -->
+                    <li th:each="menu:${menuLst}" class="nini">
+                    	<a href="#" onclick="lgCallCenter(this)">
+                            <i class="fa fa fa-bar-chart-o"></i>
+                            <span class="nav-label" th:text="${menu.MENU_NAME}"></span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <!-- 子菜单嵌套循环 -->
+                        <ul class="nav nav-second-level" th:if="${not #lists.isEmpty(menu.subMenu)}">
+                            <li th:each="submenu:${menu.subMenu}">
+                                <a class="J_menuItem" href="javascript:" th:name="${submenu.MENU_URL}" th:text="${submenu.MENU_NAME}" onclick="getMenu(this)"></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- 遍历菜单结束... -->
+                </ul>
+            </div>
+        </nav>
+        <!--左侧导航结束-->
+        <!--右侧部分开始-->
+        <div id="page-wrapper" class="gray-bg dashbard-1" style="height:1000px;">
+            <div class="row border-bottom">
+                <nav class="navbar navbar-static-top" role="navigation" :style="cusCallBusy ? 'background-color: #ff974c;' : 'background-color: #4aa5fb;'">
+                    <div class="navbar-header" style="padding: 12.8px 0;"><a class="navbar-minimalize minimalize-styl-2 btn btn-info " style="background-color:#fff;border-color:#fff;" href="#"><i class="fa fa-bars" style="color:#4aa5fb;"></i> </a>
+                        <section class="picTab">
+                          <ul>
+                              <li>今天是{{todayDate}}，距离本月结束还有{{surplusDay}}天，加油哦</li>
+                          </ul>
+                        </section>
+                    </div>
+                    <ul class="nav navbar-top-links navbar-right" :style="callSeat ? 'display:flex;justify-content:space-between;width:50%;align-items: center;margin-top:30px;' : 'margin-top:30px;'">
+                    	<div v-if="callSeat" style="flex-grow:1;margin-top:-15px;">
+                          <div class="callStateDiv">
+                              <img class="callState" :src="gCallQueue ? 'static/img/icon_gcall.png' : 'static/img/icon_1call.png'"/>
+                              <span v-if="gCallQueue">群呼坐席</span>
+                              <span v-else>点呼坐席</span>
+                          </div>
+                    	</div>
+                    	<li>
+                    		  <span style="color: #ffffff;" th:text="${name +' 你好!'}"></span>
+                    	</li>
+                        <li>
+                            <img class="callState" src="static/img/icon_edit.png" @click="EditFlag=true" />
+                        </li>
+                        <li class="dropdown" id="getout">
+                            <img class="callState" @click="loginOut" src="static/img/loginOut.png"/>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="row J_mainContent" id="content-main" >
+                <el-tabs v-model="editableTabsValue" type="card" closable @tab-remove="removeTab" @tab-click="clickTab" id="J_iframe" v-loading="loading" element-loading-text="正在连接服务器，拼命加载中(如长时间没有反馈，请刷新页面)">
+                    <el-tab-pane
+                        v-for="(item, index) in editableTabs"
+                        :key="item.name"
+                        :label="item.name"
+                        :name="item.name"
+                                 :data-lname="item.url">
+                        <iframe :src="item.url" :id="item.url" frameborder="0" width="100%" height="1000px" min-width="100%" min-height="1200px" scrolling="auto"></iframe>
+                    </el-tab-pane>
+                </el-tabs>
+
+<!--                <iframe id="J_iframe" width="100%" height="100%" src="index_v1.html?v=4.0" frameborder="0" data-id="index_v1.html"></iframe>-->
+
+            </div>
+        </div>
+        <!--右侧部分结束-->
+        <!--        获取推广二维码-->
+        <el-dialog title="推广二维码" :visible.sync="codeFlag" width="375px" class="codeDialog" top="5vh">
+            <canvas id="myCanvas" width="375" height="667">您的浏览器不支持 HTML5 canvas 标签。</canvas>
+            <div style="width:100%;text-align:center;"><el-button type="success" size="mini" @click="downCodeImg">下载图片</el-button></div>
+        </el-dialog>
+        <!--        设置密码-->
+        <el-dialog title="设置密码" :visible.sync="EditFlag" width="30%">
+          <el-form :model="pwd" label-width="100px">
+            <el-form-item label="新密码" >
+                <el-input  type="password" v-model="pwd.PASSWORD" palceholder="请输入新密码" style="width:90%;"></el-input>
+            </el-form-item>
+            <el-form-item label="确认密码">
+                <el-input  type="password" v-model="pwd.PASSWORD2" palceholder="再次输入新密码" style="width:90%;"></el-input>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="qxPwd">取 消</el-button>
+            <el-button type="primary" @click="surePwd">确 定</el-button>
+          </div>
+        </el-dialog>
+
+        <!-- 普通来电 -->
+        <el-dialog  :title="callinName" :visible.sync="callInFlag" width="30%" :before-close="closeCallIn">
+            <div class="callinDiv" style="font-size:20px;">
+                <span>{{callinPhone}}</span>
+            </div>
+            <div style="height:20px;font-size:14px;color:#4AA5FB;" class="callinDiv">
+                <span>{{callState}}</span>
+            </div>
+            <div class="callinDiv">
+                <a v-if="callinOnHungFlag" href="javascript:" style="display:inline-block;background-color:#FC5C7E;border-radius:4px;border-color:#FC5C7E;padding: 1px 8px;vertical-align: bottom;" onclick="hangup()">
+                    <img style="width:38px;" src="static/img/hungUp.png"/>
+                </a>
+                <a v-else href="javascript:" style="display:inline-block;background-color:#BFBFBF;border-radius:4px;border-color:#BFBFBF;padding: 1px 8px;vertical-align: bottom;">
+                    <img style="width:38px;" src="static/img/hungUp.png"/>
+                </a>
+            </div>
+        </el-dialog>
+
+        <!-- 群呼来电 -->
+        <el-dialog  title="群呼来电" :visible.sync="gCallinFlag" width="550px" :before-close="closegCallIn" :class="gYxCus.state==1 ? 'gcallin' : 'gcallin0'">
+            <div class="gcallin_t" :style="gYxCus.state==1 ? 'background-color: #eff7ff;' : 'background-color: #f0fff8;'">
+                <div class="gcallin_t_user" :style="gYxCus.state==1 ? 'background-color: #72bbff;' : 'background-color: #64e4a8;'">
+                    <div>
+                        <img :src="gYxCus.state==1 ? 'static/img/gCallxt.png' : 'static/img/gCallpt.png'"/>
+                    </div>
+                    <div v-if="gYxCus.state==1">系统客户</div>
+                    <div v-else>普通客户</div>
+                </div>
+                <div class="gcallin_t_name">
+                    <div>{{gCallinName | gCallinPhoneFillter}}</div>
+                    <div>{{gCallinPhone | gCallinPhoneFillter}}</div>
+                </div>
+                <div class="gcallin_t_c" :style="gYxCus.state==1 ? 'color:#5faffa;' : 'color:#64e4a8;'">{{gCallinCon}}</div>
+            </div>
+            <div class="gcallin_c" v-if="gCallun">
+                <div v-if="gCallinYXFlag">
+                    <div v-if="gcallConversationTime>10" class="gcallin_cl" @click="gcalltoIntention">转为意向</div>
+                    <div v-else class="gcallin_cl10" @click="gcalltoIntention">转为意向({{11-gcallConversationTime}}s)</div>
+                </div>
+                <div class="gcallin_cr">
+                    <div @click="gCallinHangup(0)">挂断电话</div>
+                    <div @click="gCallinHangup(1)">挂断示忙</div>
+                </div>
+            </div>
+            <div v-if="gCalltoYXFlag">
+                <div class="gcallin_i"><i class="fa fa-hand-o-down"></i></div>
+                <div class="gcallyx">
+                    <div class="gcallyx_t">
+                        <div>
+                            <span>姓名：</span>
+                            <el-input  type="text" v-model="gYxCus.YBC002" palceholder="请输入姓名" style="width:100px;"></el-input>
+                        </div>
+                        <div>
+                            <span>性别：</span>
+                            <el-radio-group v-model="gYxCus.YBC004_TP">
+                                <el-radio-button label="男" value="1"></el-radio-button>
+                                <el-radio-button label="女" value="2"></el-radio-button>
+                            </el-radio-group>
+                        </div>
+                    </div>
+                    <div class="gcallyx_t">
+                        <span style="display:flex;width:53px;">备注：</span>
+                        <el-input type="textarea" :rows="2" v-model="gYxCus.YBC013"></el-input>
+                    </div>
+                    <div style="text-align: center;">
+                        <el-button type="primary" style="width:120px;" @click="gCallYxBtn">保存</el-button>
+                    </div>
+                </div>
+            </div>
+        </el-dialog>
+        <!-- 呼叫工作台 -->
+        <div v-if="callSeat && callDeskFlag" class="callDesk">
+            <div class="callDeskc">
+                <div class="callDeskcDiv" style="margin-left:50px;">
+                    <div :style="gCallQueue ? 'background-color:#ffc94b;' : 'background-color:#72bbff;'" @click="changeCallLine(1)"><img src="static/img/icon_gcall.png"/></div>
+                    <div>群呼</div>
+                </div>
+                <div class="callDeskcDiv">
+                    <div :style="gCallQueue ? 'background-color:#72bbff;' : 'background-color:#ffc94b;'" @click="changeCallLine(0)"><img src="static/img/icon_1call.png"/></div>
+                    <div>点呼</div>
+                </div>
+                <div class="callDeskLine callDeskLineL"></div>
+                <el-popover
+                    placement="top"
+                    width="580"
+                    trigger="click" class="callDeskRcd">
+                    <el-table
+                      :data="callRecords"
+                      :row-class-name="headerClassName"
+                      style="width: 100%">
+                        <el-table-column
+                          type="index"
+                          label="序号"
+                          width="50">
+                        </el-table-column>
+                        <el-table-column
+                          prop="YBC002"
+						  :formatter="formatterName"
+                          label="客户姓名">
+                        </el-table-column>
+                        <el-table-column
+                          prop="YBC003"
+						  :formatter="formatterPhone"
+                          label="联系电话" width="150">
+                        </el-table-column>
+                        <el-table-column
+                          prop="callState"
+                          label="拨打状态">
+                        </el-table-column>
+                        <el-table-column label="回拨" width="50">
+                          <template slot-scope="scope">
+                            <el-button
+                              icon="fa fa-phone"
+                              style="color:#fff;padding:4px 8px;background-color:#54DE9E;border-color:#54DE9E;font-size:14px;"
+                              @click="callBack(scope.$index, scope.row)"></el-button>
+                          </template>
+                        </el-table-column>
+                    </el-table>
+                    <div style="text-align:right;" v-if="moreRecordFlag">
+                        <el-pagination
+                          @current-change="handleCurrentChange"
+                          :current-page="pageInit.currentPage"
+                          :page-size="10"
+                          layout="total, prev, pager, next, jumper"
+                          :total="pageInit.totalResult">
+                        </el-pagination>
+                    </div>
+                    <div style="text-align:center;" v-else>
+                        <el-button type="text" plain @click="moreRecord">查看更多记录<i class="el-icon-d-arrow-right"></i></el-button>
+                    </div>
+                    <div slot="reference" class="callDeskr">
+                        <div><img src="static/img/icon_callRcd.png"/></div>
+                        <div>通话记录</div>
+                    </div>
+                </el-popover>
+                <div class="callDeskLine callDeskLineR"></div>
+                <div class="callDeskcDiv">
+                    <div :style="cusCallBusy ? 'background-color:#ffc94b;' : 'background-color:#72bbff;'" @click="changeSeatBS(0)"><img src="static/img/icon_busycall.png"/></div>
+                    <div>示忙</div>
+                </div>
+                <div class="callDeskcDiv">
+                    <div :style="cusCallBusy ? 'background-color:#72bbff;' : 'background-color:#ffc94b;'" @click="changeSeatBS(1)"><img src="static/img/icon_rexcall.png"/></div>
+                    <div>示闲</div>
+                </div>
+                <div class="callDeskMin"><img src="static/img/icon_callmin.png"  @click="callDeskFlag = !callDeskFlag"/></div>
+            </div>
+        </div>
+        <div v-else-if="callSeat && !callDeskFlag" class="callDesk0" @click="callDeskFlag = !callDeskFlag">
+            <div><img src="static/img/icon_callmax.png"/></div>
+            <div><img src="static/img/icon_deskmin.png"/></div>
+        </div>
+    </div>
+<div th:include="html/page/indexpublic :: html"></div>
+
+</body>
+
+    <script type="text/javascript" src="static/js/ola_api.js"></script>
+
+
+    <script type="text/javascript">
+	var basePath="/"+window.location.pathname.split("/")[1];
+        var webSocketIp = window.location.host+basePath;
+        var webSocketUrl = 'wss://'+webSocketIp+'/websocket';
+        console.log('webSocket地址：'+webSocketUrl);
+        var ws = new WebSocket(encodeURI(webSocketUrl));
+        ws.onopen = function()
+        {  console.log("open");
+          //ws.send("hello");
+        };
+        ws.onmessage = function(evt)
+        {
+          console.log(evt.data);
+          var ss=JSON.parse(evt.data);
+          if(ss.msgType=='1'){
+              App.aletMsg(ss.msgContent,true);
+          }else{
+              App.aletMsg(ss);
+          }
+
+        };
+        ws.onclose = function(evt)
+        {
+          console.log("WebSocketClosed!");
+        };
+        ws.onerror = function(evt)
+        {
+          console.log("WebSocketError!");
+        };
+
+    </script>
+
+
+<!--    呼叫系统-->
+<script  th:inline="javascript">
+
+
+    console.log("——————————————————————————");
+    console.log(basePath);
+
+//    https://192.168.1.163:8443/dbSun/index
+
+
+  var callSeat=true;
+  var gCallQueue=false;
+    //测试端口
+//  var serIp= '192.168.1.241';
+//	var serPort= "8080";
+//	var ola_queue = "10884";
+  console.log('后台获取的队列号'+[[${session.user.QUEUE}]]);
+  var serIp= '192.168.1.241';
+	var serPort= "10085";
+	var ola_queue = [[${session.user.NUMBER}]];
+	var ola_extn = [[${session.user.NUMBER}]];
+  console.log('坐席队列号：'+ola_queue);
+  console.log('坐席编号：'+ola_extn);
+//    App.$data.callNumber=ola_extn;
+	var popup_url = "";
+
+    onReady();
+
+    //初始化加载，登录
+    function onReady() {
+        var loginDomain = "rx";//这里调用API接口 所以要用81端口
+        console.log("------------未转换前的坐席号----------")
+        console.log(ola_extn);
+        console.log(ola_extn.indexOf('8'));
+        let callSeat0=ola_extn.indexOf('8');
+
+        console.log("——————————第一个是否是坐席————————————————");
+        console.log(callSeat);
+        if(callSeat0==0){
+
+            websocket_connect();
+
+        }else{
+            console.log("——————————第二个是否是坐席(不是坐席)————————————————");
+            console.log(callSeat);
+            callSeat=false;
+        }
+
+    }
+
+    function log(msg) {
+		//IE has no console
+		if ('console' in window) console.log(msg);
+	}
+
+    function websocket_connect(){
+
+		websocket_url = "wss://"+serIp+":"+serPort+"/ola_socket";
+		ola.connect(websocket_url);
+		ola.onConnect = onConnect;
+		ola.onClose = onClose;
+		ola.onMessage = onMessage;
+	}
+
+    function onConnect() {
+		console.log("————————websocket connected!呼叫系统连接——————————");
+		// send hello data to server.
+		//ola.ping();
+		//log("sent ping to server");
+
+		ola._extn = ola_extn;
+    // console.log("退出呼叫连接，重新登录呼叫")
+		logout(ola_extn);
+        ola.subscribe('ola.agent.' + ola_extn);
+        ola.subscribe('ola.caller.' + ola_extn);
+        ola.get_agent_state(ola_extn);
+		// ola.trigger_agent_state(ola_extn);
+        login(ola_queue, ola_extn, {type: "onhook"});
+	};
+    function onClose(){
+        console.log("登录失败");
+        callSeat=false;
+        App.$data.lgSeatFlag=false;
+        App.onClose();
+    }
+
+    	/* callbacks */
+    //2019.6.26更改新跟进通话
+  function onMessage(evt){
+		var data = JSON.parse(evt.data);
+		console.log(data);
+
+		if (data.event_type == "agent_state") {//分机状态
+
+            console.log('分机状态显示');
+            console.log(data.state);
+            if(data.state=='login'){//登录成功
+                console.log("坐席登录成功");
+                callSeat=true;
+                var callindex_v1;
+                if(document.getElementById("index_v1.html")){
+                    callindex_v1 =document.getElementById("index_v1.html").contentWindow;
+                    setTimeout(function(){
+                        callindex_v1.index_v1App.seatSate=true;
+                        console.log("——————————打印现在坐席seatSate————————")
+                        console.log(callindex_v1.index_v1App.seatSate);
+
+                        go_ready();
+                    },3000)
+                }
+            }else if(data.state == "ready"){//示闲
+                App.$data.cusCallBusy=false;
+                App.$data.changeLineFlag=true;
+                var index_v1App =document.getElementById("index_v1.html").contentWindow.index_v1App;
+                index_v1App.cusCallBusy=false;
+
+            }else if(data.state == "unready"){//示忙
+                App.$data.cusCallBusy=true;
+                App.$data.changeLineFlag=true;
+                var index_v1App =document.getElementById("index_v1.html").contentWindow.index_v1App;
+                index_v1App.cusCallBusy=true;
+
+                if(data.old_state == "busy"){
+                    go_ready();//示闲
+                    if(data.call_direction=='undefined'){
+                        App.$data.gCallinCon="对方已挂断！请挂机！";
+                        App.$data.callState="非常遗憾，没有接听到来电!!!";
+                        App.$data.gCallun=false;
+                        App.$data.callinOnHungFlag=false;
+                    }
+                }
+            }else if (data.state == "busy") {//通话中
+                App.$data.changeLineFlag=false;
+                var callWorkBench=null;
+                if(document.getElementById(basePath+"/pho_calOut/goWorkBench?YBC008_TP=0")){
+                    callWorkBench =document.getElementById(basePath+"/pho_calOut/goWorkBench?YBC008_TP=0").contentWindow.callWorkbApp;
+                }
+                var newsCusWork=null;
+                if(document.getElementById("souf/goInitCusPage")){
+                    newsCusWork =document.getElementById("souf/goInitCusPage").contentWindow.newsCusWorkBench;
+                }
+                console.log("______________________获取的新客户跟进newsCusWork————————————————————————————————")
+                console.log(newsCusWork);
+
+				if (data.private_data == "ring") {//来电响铃
+            if(data.app_data.batch_accept){//群呼来电
+                console.log("进入群呼来电显示");
+                console.log("群呼来电任务流水号"+data.app_data.batch_accept);
+                console.log("群呼来电任务电话号码"+data.other_dn);
+                console.log("群呼来电通话记录流水"+data.call_accept);
+                if(data.other_dn.length>11){
+                    data.other_dn=(data.other_dn).substring((data.other_dn).length-11);
+                }
+                // 调试群呼
+
+                App.gCallName(data.other_dn,data.call_accept)//群呼来电，传入后台YBCF009
+            }else{
+                console.log("进入普通来电显示");
+                App.$data.callInFlag=true;
+                App.$data.callState="来电啦，赶快手动接听~！";
+                App.$data.callinOnFlag=true;
+                App.$data.callinOnHungFlag=false;
+                if(data.other_dn.length>11){
+                    data.other_dn=(data.other_dn).substring((data.other_dn).length-11);
+                }
+                App.$data.callinPhone=data.other_dn;
+                App.getCallName(data.other_dn);
+
+            }
+				} else if (data.private_data =="calling") {//话机已拨打，请拿起话机
+              if(data.app_data.call_direction=='outbound'){
+                  if(callWorkBench!=null){
+                      callWorkBench.callStateS = 2;
+                      callWorkBench.callState="请拿起话机，进行呼叫";
+                  }
+                  if(newsCusWork!=null){
+                      newsCusWork.callStateS = 2;
+                      newsCusWork.callState="请拿起话机，进行呼叫";
+                  }
+              }
+				}else if (data.private_data == "answered") {//话机已接听
+
+              if(data.app_data.call_direction=='outbound'){//呼叫中（外呼outbound）
+
+                  if(callWorkBench!=null){
+                      callWorkBench.callStateS = 3;
+                      callWorkBench.callState="呼叫中，等待接听中...";
+                  }
+                  if(newsCusWork!=null){
+                      newsCusWork.callStateS = 3;
+                      newsCusWork.callState="呼叫中，等待接听中...";
+                  }
+                  //待客户真正接听的时返回的状态true
+                  if(data.other_answered){
+                      if(callWorkBench!=null){
+                          callWorkBench.callStateS = 4;
+                          callWorkBench.callOutAnswer();
+                          callWorkBench.YBCF0010_TP=1;
+                      }
+                      if(newsCusWork!=null){
+                          newsCusWork.callStateS = 4;
+                          newsCusWork.callOutAnswer();
+                          newsCusWork.YBCF0010_TP=1;
+                      }
+                  }
+              }else if(data.app_data.call_direction=='inbound'){//通话中（来电inbound）
+
+                  //群呼来电--接听（回写通话记录）data.app_data.batch_accept
+
+                  if(data.app_data.batch_accept){//群呼来电
+                      console.log('群呼来电接听中')
+
+                      App.gCallinRecord(data.call_accept);//群呼来电，传入后台YBCF009
+
+                      App.gCalling();
+                  }else{
+                      console.log('普通来电接听中')
+                      console.log(data.call_accept);
+                      addFlowCall(data.call_accept);
+                      App.callInAnswer();
+
+                  }
+              }
+				}
+			} else if (data.old_state == "busy") {//已挂机
+
+            App.$data.changeLineFlag=false;
+            if(App.$data.gCallBreak){
+                go_break()//示忙
+            }else{
+                go_ready();//示闲
+            }
+            var callWorkBench=null;
+            if(document.getElementById(basePath+"/pho_calOut/goWorkBench?YBC008_TP=0")){
+                callWorkBench =document.getElementById(basePath+"/pho_calOut/goWorkBench?YBC008_TP=0").contentWindow.callWorkbApp;
+            }
+            var newsCusWork=null;
+            if(document.getElementById("souf/goInitCusPage")){
+                newsCusWork =document.getElementById("souf/goInitCusPage").contentWindow.newsCusWorkBench;
+            }
+            if(data.state=='acw'){//接通已挂机整理中
+                if(data.app_data.call_direction=='outbound'){//呼出通话结束
+
+                    if(callWorkBench!=null){
+                        callWorkBench.callStateS = 1;
+                        callWorkBench.callBFlag=false;
+                        callWorkBench.callState="通话结束";
+                        callWorkBench.callingFg=true;
+                        callWorkBench.callHangUPDo();
+                    }
+                    if(newsCusWork!=null){
+                        newsCusWork.callStateS = 1;
+                        newsCusWork.callBFlag=false;
+                        newsCusWork.callState="通话结束";
+                        newsCusWork.callingFg=true;
+                        newsCusWork.callHangUPDo();
+                    }
+                }else if(data.app_data.call_direction=='inbound'){//呼入通话结束
+                    //群呼来电--挂机
+                    if(data.app_data.batch_accept){
+                        App.gCallinHangup(0);
+                    }else{
+                        App.callInHangup();//普通来电挂机
+
+                    }
+                }
+            }else if(data.state=='unready'){//未接通已挂机
+                if(data.app_data.call_direction=='outbound'){//呼出通话结束
+
+                    if(callWorkBench!=null){
+                        callWorkBench.callStateS = 1;
+                        callWorkBench.callBFlag=false;
+                        callWorkBench.callState="通话结束";
+                        callWorkBench.callingFg=true;
+                    }
+                    if(newsCusWork!=null){
+                        newsCusWork.callStateS = 1;
+                        newsCusWork.callBFlag=false;
+                        newsCusWork.callState="通话结束";
+                        newsCusWork.callingFg=true;
+                    }
+                }else{//呼入通话结束
+                    App.$data.callState="非常遗憾，没有接听到来电!!!";
+                }
+            }
+			}
+		} else if (data.event_type == "agent_caller_state") {
+  			// special feature, never mind
+  			if (data.action == "in") {
+
+  			} else {
+
+  			}
+		} else if (data.event_type == "command/reply") {
+                console.log("连接服务器成功，待签入");
+		}
+	}
+
+
+
+//    签入
+    function login() {
+		ola.login(ola_queue, ola_extn, {type: "onhook"});
+        console.log("签入")
+	}
+
+
+
+    function logout() {
+		ola.logout();
+	}
+
+	function go_ready() {
+
+      App.$data.gCallBreak=false;
+		  ola.go_ready();
+      console.log('调用示闲')
+	}
+
+	function go_break() {
+		  ola.go_break();
+      console.log('调用示忙')
+	}
+
+	function answer() {
+		ola.answer();
+	}
+
+	function dial(dst,extFields) {
+		ola.dial(dst,extFields);
+	}
+
+	function conference(dst) {
+		ola.conference(dst);
+	}
+
+	function conference_uuid(channel_uuid) {
+		ola.conference_uuid(channel_uuid);
+	}
+
+	function hangup() {
+		ola.hangup();
+	}
+
+	function take_call(uuid) {
+		ola.take_call(ola_extn, uuid);
+	}
+
+
+
+    // 挂断电话
+    function hangupTest(phone) {
+        console.log('挂断号码：' + phone + '  ');
+        hangup();
+        if(App.$data.callInFlag){
+            console.log("进入来电挂断");
+            App.clearTimer();
+        }else{
+            var callWorkBench=null;
+            if(document.getElementById(basePath+"/pho_calOut/goWorkBench?YBC008_TP=0")){
+                callWorkBench =document.getElementById(basePath+"/pho_calOut/goWorkBench?YBC008_TP=0").contentWindow.callWorkbApp;
+            }
+            if(callWorkBench){
+              callWorkBench.callBFlag=false;
+              callWorkBench.callState="通话结束";
+              callWorkBench.callingFg=true;
+            }
+
+            var newsCusWork=null;
+            if(document.getElementById("souf/goInitCusPage")){
+                newsCusWork =document.getElementById("souf/goInitCusPage").contentWindow.newsCusWorkBench;
+            }
+            if(newsCusWork){
+              newsCusWork.callBFlag=false;
+              newsCusWork.callState="通话结束";
+              newsCusWork.callingFg=true;
+            }
+        }
+    }
+        //外呼
+    function calloutTest(phone,extFields) {
+        if(ola.status()!=1){
+          websocket_connect();
+            App.onClose();
+        }
+
+        var callWorkBench=null;
+        if(document.getElementById(basePath+"/pho_calOut/goWorkBench?YBC008_TP=0")){
+            callWorkBench =document.getElementById(basePath+"/pho_calOut/goWorkBench?YBC008_TP=0").contentWindow.callWorkbApp;
+        }
+        if(callWorkBench){
+            callWorkBench.YBCF0010_TP=2;
+            //重新初始化通话状态，一个页面内的多次通话不能受影响
+            callWorkBench.callStateS = 1;
+        }
+
+        var newsCusWork=null;
+        if(document.getElementById("souf/goInitCusPage")){
+            newsCusWork =document.getElementById("souf/goInitCusPage").contentWindow.newsCusWorkBench;
+        }
+        if(newsCusWork){
+            newsCusWork.YBCF0010_TP=2;
+            //重新初始化通话状态，一个页面内的多次通话不能受影响
+            newsCusWork.callStateS = 1;
+        }
+
+        dial(phone,extFields);
+
+    //
+    //        // 自定义拨打状态返回处理方法（可选）
+    //        //发送拨打任务
+    //        xl_seat.xlClient.callout(phone, listener, handler("拨打请求"),extFields);
+    }
+
+    function addFlowCall(YBCF009){
+        var basePath="/"+window.location.pathname.split("/")[1];
+        console.log("_____流水号————————")
+        console.log(YBCF009);
+        $.ajax({
+            type:"GET",
+            url:`${basePath}/pho_calOut/addFlowForCall`,
+            data:{YBCF009:YBCF009,YBCF007_TP:2,YBCF0010_TP:1,YBCF0011_TP:1},
+            success:function(data){
+                console.log('写入通话记录返回data')
+                console.log(data)
+            }
+        })
+    }
+
+
+
+
+</script>
+<script type="text/javascript">
+    var editableTabsValue="主页";
+    var editableTabs=[{name:"主页",url:"index_v1.html"}];
+    var basePath="/"+window.location.pathname.split("/")[1];
+
+    var oldNode=undefined;
+
+	$(document).ready(function () {
+
+//		$('#getout').click(function () {
+//		    swal({
+//		        title: "您确定退出吗?",
+//		        text: "退出后需要重新登录！",
+//		        type: "warning",
+//		        showCancelButton: true,
+//		        confirmButtonColor: "#DD6B55",
+//		        confirmButtonText: "退出",
+//		        closeOnConfirm: false
+//		    }, function () {
+//		    	loginOut();
+//		    });
+//		});
+
+	});
+
+	//退出
+	function loginOut(){
+        var user = $("#user").val();
+        var password = $("#pwd").val();
+        	 $.ajax({
+			        type: "get",
+			        url: basePath+"/logout",
+			        async: false,
+			        success: function (data)
+			        {
+//                        2018.5.27增加退出呼叫系统
+                        logout();
+			        	//swal("退出成功！", "", "success");
+			        	window.location.href=basePath+"/index";			        },
+			        error:function(){
+			        	swal("退出出错！", "", "faild");
+			        }
+			     });
+
+        }
+	function getCodeImg(codeImgSrc){
+        var c=document.getElementById("myCanvas");
+        var ctx=c.getContext("2d");
+        var ctxBg=c.getContext("2d");
+        var ctxFont1=c.getContext("2d");
+        var img=new Image();
+        img.src="static/img/codeImg.png";
+        img.onload = function(){
+            ctx.drawImage(img,0,0,375,390);
+        }
+        ctxBg.fillStyle="#0440d7";
+        ctxBg.fillRect(0,390,375,400);
+        ctxFont1.font="16px Arial";
+        ctxFont1.fillStyle='#ffffff';
+        ctxFont1.fillText("长按图片识别二维码",110,405);
+        ctxFont1.fillText("评估房贷信息",140,430);
+        ctxFont1.fillText("叮叮金服房贷专家",125,650);
+        var codeImg=new Image();
+        codeImg.src=codeImgSrc;
+        codeImg.onload = function(){
+            ctx.drawImage(codeImg,95,440,180,180);
+        }
+    }
+//6.26websocket消息改
+    function getHandle(obj){
+        App.$confirm('此操作将处理事项, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+            $.ajax({
+                type:"GET",
+                url:`${basePath}/notice_/updateNeedForone`,
+                data:{YBC_NEE001:obj.msgId},
+                success:function(data){
+                    if(data.msg=="200"){
+                    }
+                }
+            })
+        }).catch(() => {
+          App.$message({
+            type: 'info',
+            message: '已取消处理'
+          });
+        });
+  }
+  //6.26websocket消息改
+  function getCusDetails(obj){
+      $.ajax({
+          type:"GET",
+          url:`${basePath}/notice_/updateNeedForone`,
+          data:{YBC_NEE001:obj.msgId},
+          success:function(data){
+              if(data.msg=="200"){
+              }
+          }
+      })
+      if(obj.msgBodyYbc001){
+          localStorage.cusFollowYBC001=obj.msgBodyYbc001;
+
+          let url=`${basePath}/pho_calOut/goWorkBench?YBC008_TP=0`
+          let newTabs={
+              name:"呼叫工作台",
+              url
+          }
+
+          for(let index in App.editableTabs){
+              if(App.editableTabs[index].name=="呼叫工作台"){
+                  App.editableTabs.splice(index,1)
+              }
+          }
+          setTimeout(function(){
+              App.editableTabs.push(newTabs);
+              App.editableTabsValue="呼叫工作台";
+          },500)
+
+          // let tabsFlag=false;
+          // for(let item of app.$data.editableTabs){
+          //     if(url==item.url){
+          //         tabsFlag=true
+          //     }
+          // }
+          // if(tabsFlag){
+          //     let ifms=window.parent.document.getElementById(url);
+          //     ifms.src=url;
+          //     setTimeout(function(){
+          //         app.$data.editableTabsValue="呼叫工作台";
+          //     },1500);
+          // }else{
+          //     app.$data.editableTabs.push(newTabs);
+          //     app.$data.editableTabsValue="呼叫工作台";
+          // }
+      }
+}
+
+    var App=new Vue({
+        el:"#wrapper",
+        data(){
+            return {
+                editableTabsValue:editableTabsValue,
+                editableTabs:editableTabs,
+//                2018.5.27增加坐席号显示
+                callNumber:ola_extn,
+                todayDate:"2017-12-12",
+                surplusDay:0,
+                lgSeatFlag:false,
+                EditFlag:false,
+                pwd:{},
+                callInFlag:false,
+                callinPhone:"",
+                callinName:"",
+                callState:"",
+                timerFlag:false,
+                YBCF0011_TP:1,
+                YBCF0010_TP:2,
+                callinOnFlag:true,
+                callinOnHungFlag:false,
+                callSeat:callSeat,
+                loading:false,
+                cusCallBusy:false,//坐席状态示闲、示忙
+                //群呼来电
+                gCallQueue:false,//默认点呼、false点呼、true群呼
+                gCallinFlag:false,//群呼来电对话框
+                gCallun:true,//群呼来电已接听，如果未接听到，挂断也隐藏
+                gCallinName:"陌生号码",//群呼来电姓名
+                gCallinPhone:'12345678910',//群呼来电号码
+                gYxCus:{YBC004_TP:"男",YBC003:'',YBCF009:''},//群呼来电客户相关数据
+                gCallinYXFlag:false,//群呼来电未接‘转为意向’按钮不显示
+                gCalltoYXFlag:false,//隐藏转为意向表单
+                gCallinCon:"来电，请拿起听筒接听！",//群呼来电提示语，后面转为计时
+                gtimerFlag:false,//群呼来电，清除定时器使用
+                gCallBreak:false,//群呼来电，挂断电话用于示忙
+                gCallDeptCus:{},//群呼来电，如果存在系统，所属客户经理
+                moreRecordFlag:false,//获取更多通话记录
+                callRecords:[],//群呼点呼通话记录
+                pageInit:{currentPage:1,totalResult:1},//通话记录翻页
+                callDeskFlag:true,//系统呼叫工作台的flag
+                changeLineFlag:false,//呼叫系统是否可以切换线路，默认false,不能切换
+                gcallConversationTime:0,//群呼来电通话时间，主要用于转为意向的10s判断
+
+                codeFlag:false,//推广二维码弹窗
+                notifyList:[],//6.26websocket消息改
+                souOptions:[]
+            }
+        },
+        mounted(){
+            var date=new Date();
+
+            var y=date.getFullYear();
+            var m=date.getMonth()+1;
+            var d=date.getDate();
+
+            var day = new Date(y, m, 0);
+
+            this.todayDate=`${y}-${m}-${d}`;
+            this.surplusDay=day.getDate()-d;
+
+            console.log("——————————第三个是否是坐席————————————————");
+            console.log(this.callSeat);
+
+            this.editableTabsValue="主页";
+            this.editableTabs=[{
+                    name:"主页",
+                    url:'index_v1.html'
+                }]
+
+            if(localStorage.records){
+                this.callRecords=JSON.parse(localStorage.records);
+            }
+				    this.sertAlertMsg();
+            this.getSourceTypeList();
+        },
+        filters: {
+            gCallinPhoneFillter(phone){
+                if(phone.length==11){
+                    return phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+                }else{
+                    return phone
+                }
+            },
+        },
+        methods:{
+            getSourceTypeList(){
+                let that=this;
+                $.ajax({
+                    type:"GET",
+                    url:`${basePath}/souf/getMBList`,
+                    data:{YBC_LAB004_TP:4},
+                    success:function(data){
+                        console.log(data);
+                        if(data.msg="200"){
+                            that.souOptions=data.result;
+                        }
+                    }
+                })
+            },
+            formatterPhone(row,column){
+                let phone=(row.YBC003).replace(/[^0-9]/ig,"");
+                if(phone.length==11){
+                    return phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+                }else{
+                    return phone
+                }
+            },
+            formatterName(row,column){
+				let phone=row.YBC002;
+                if(phone.length==11){
+					phone=phone.replace(/[^0-9]/ig,"");
+                    return phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+                }else{
+                    return phone
+                }
+            },
+          //6.26websocket消息改
+          aletMsg(message,time) {
+            	if(time){
+            	   this.$notify({
+            		  title: '强制下线',
+            		  message: message,
+            		  type: 'warning',
+            		  duration:0
+            	   });
+            	}else{
+            	  this.notifyList.push(message);
+            	}
+          },
+          //6.26websocket消息改
+          sertAlertMsg(){
+            	var that=this;
+            	var ss=setInterval(function(){
+              		if(that.notifyList.length>0){
+                			var sstype='';
+                			if(that.notifyList[0].YBC_NEE013_TP=='49'){
+                				sstype='电话联系'
+                			}else{
+                				sstype='邀约上门'
+                			}
+                			var con="<div class='note"
+                			if(that.notifyList[0].YBC_NEE012_TP=='47'){
+                			  con+=" noteClass1"
+                			}
+                			con+="'><div class='noteTop'>"+sstype+"</div><div>"+that.notifyList[0].msgContent+"</div><div><span onclick='getHandle("+JSON.stringify(that.notifyList[0])+")'>处理</span>"
+                			if(that.notifyList[0].msgBodyYbc001){
+                				con+="<span onclick='getCusDetails("+JSON.stringify(that.notifyList[0])+")'>详情</span></div></div>"
+                			}else{
+                				con+="</div></div>"
+                			}
+                			that.$notify({
+                				dangerouslyUseHTMLString: true,
+                				message: con,
+                				duration:30000,
+                        showClose:false,
+                        onClick:function(){
+                            this.close();
+                        }
+                			});
+                			that.notifyList.splice(0,1)
+                		}else{
+                		}
+              	},1000)
+            },
+		// 获取二维码
+            getCode(){
+                let that=this;
+                this.codeFlag=true;
+                setTimeout(function(){
+                    $.ajax({
+                        type:"GET",
+                        url:`${basePath}/spr_actqr/createQRCode`,
+                        data:"",
+                        success:function(data){
+                            console.log(data);
+                            getCodeImg(data.result);
+                        }
+                    })
+                },500)
+            },
+            downCodeImg(){
+                var c=document.getElementById("myCanvas");
+                //图片导出为 png 格式
+                var type = 'png';
+                var imgData = c.toDataURL(type);
+
+                /**
+                 * 获取mimeType
+                 * @param  {String} type the old mime-type
+                 * @return the new mime-type
+                */
+                var _fixType = function(type) {
+                   type = type.toLowerCase().replace(/jpg/i, 'jpeg');
+                   var r = type.match(/png|jpeg|bmp|gif/)[0];
+                   return 'image/' + r;
+                };
+
+                // 加工image data，替换mime type
+                imgData = imgData.replace(_fixType(type),'image/octet-stream');
+
+                /**
+                 * 在本地进行文件保存
+                 * @param  {String} data     要保存到本地的图片数据
+                 * @param  {String} filename 文件名
+                 */
+                var saveFile = function(data, filename){
+                    var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+                    save_link.href = data;
+                    save_link.download = filename;
+
+                    var event = document.createEvent('MouseEvents');
+                    event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+                    save_link.dispatchEvent(event);
+                };
+
+                // 下载后的文件名
+                var filename = '二维码 .' + type;
+                // download
+                saveFile(imgData,filename);
+            },
+            // 切换坐席状态
+            changeSeatBS(n){
+                // 判断正在使用呼叫系统时，不能切换线路
+                if(this.changeLineFlag){
+                  //0示忙、1示闲
+                    if(n==0 && !this.cusCallBusy){
+                        go_break();
+                    }else if(n==1 && this.cusCallBusy){
+                        go_ready();
+                    }
+                }else{
+                    this.$message.error('你正在通话中，不能进行切换坐席状态！');
+                }
+            },
+            //切换点呼、群呼
+            changeCallLine(n){
+                // 判断正在使用呼叫系统时，不能切换线路
+                if(this.changeLineFlag){
+                      //先退出当前队列
+                    ola.unsubscribe('ola.queue.' + ola_queue + '.' + ola_extn);
+                    ola.unsubscribe('ola.caller.' + ola_extn);
+                    //0点呼、1群呼
+                    let callindex_v1;
+                    if(document.getElementById("index_v1.html")){
+                        callindex_v1 =document.getElementById("index_v1.html").contentWindow.index_v1App;
+                    }
+                    if(n==0 && this.gCallQueue){
+                        console.log('————————————————切换为点呼——————————————');
+                        ola_queue=ola_extn;
+                        this.gCallQueue=false;
+                        callindex_v1.queueFlag=false;
+                    }else if(n==1 && !this.gCallQueue){
+                        console.log('————————————————切换为群呼——————————————');
+                        ola_queue='10001';
+                        this.gCallQueue=true;
+                        callindex_v1.queueFlag=true;
+                    }
+                    onConnect();
+                }else{
+                    this.$message.error('你正在通话中，不能进行切换呼叫模式！建议在示忙下切换~');
+                }
+
+            },
+            //群呼来电处理函数
+            //当群呼来电弹出
+            gCallin(){
+                console.log('群呼来电，弹出群呼来电对话框!');
+                this.gCallinFlag=true;//弹出对话框
+                this.gCallinYXFlag=false;//转为意向按钮
+                this.gCalltoYXFlag=false;//隐藏转为意向表单
+                this.gCallun=true;
+                this.gCallinCon="来电，请拿起听筒接听！";
+            },
+            //群呼来电接听中
+            gCalling(){
+                this.gCallinYXFlag=true;//转为意向按钮
+                this.gtimerFlag=false;
+                this.gCallTime();
+                this.gCallToken();
+                this.getCallRecord();//群呼接听后，添加通话记录
+            },
+            gCallToken(){
+                let that=this;
+                $.ajax({
+                    type:"GET",
+                    url:`${basePath}/pho_group_call/toIntentionToken`,
+                    data:"",
+                    success:function(data){
+                        if(data.msg=="200"){
+                            that.gYxCus.Token=data.result.Token;
+                        }else if(data.msg=="500"){
+                            that.gCallToken();
+                        }
+                    }
+                })
+            },
+            //群呼来电转为意向判断10s
+            gcalltoIntention(){
+                if(this.gcallConversationTime>10){
+                    this.gCalltoYXFlag=true
+                }else{
+                    this.$message({
+                      message: '与该客户的通话时间少于10s，不能转为意向！',
+                      type: 'warning'
+                    });
+                }
+            },
+            // 获取真实通话记录
+            moreRecord(){
+                this.moreRecordFlag=true;
+                this.handleCurrentChange(1);
+            },
+//            加入通话记录详情
+            getCallRecord(){
+                this.moreRecordFlag=false;
+                var obj={YBC002:this.gCallinName,YBC003:this.gCallinPhone,callState:'接通'}
+                console.log(obj);
+                if(localStorage.records){
+                    var records=JSON.parse(localStorage.records);
+                    records.unshift(obj);
+                    if(records.length>10){
+                        records.splice(-1,1);
+                    }
+                    localStorage.records=JSON.stringify(records);
+                }else{
+                  var arr= new Array();
+                  arr[0]=obj;
+                  localStorage.records=JSON.stringify(arr);
+                }
+                this.callRecords=JSON.parse(localStorage.records);
+            },
+
+//            回拨电话
+            callBack(index,row){
+                console.log(index,row);
+                let phoneNum=(row.YBC003).replace(/[^0-9]/ig,"");
+
+                sessionStorage.calloutPhone=phoneNum;
+
+                let url=`${basePath}/pho_calOut/goWorkBench?YBC008_TP=0`
+                let newTabs={
+                    name:"呼叫工作台",
+                    url
+                }
+                let tabsFlag=false;
+                for(let item of App.editableTabs){
+                    if(url==item.url){
+                        tabsFlag=true
+                    }
+                }
+                if(tabsFlag){
+                    let ifms=window.document.getElementById(url);
+                    ifms.src=url;
+                    setTimeout(function(){
+                        App.editableTabsValue="呼叫工作台";
+                    },1500);
+                }else{
+                    App.editableTabs.push(newTabs);
+                    App.editableTabsValue="呼叫工作台";
+                }
+            },
+//            通话记录翻页
+            handleCurrentChange(val){
+                console.log(val);
+                let that=this;
+                $.ajax({
+                    type:"GET",
+                    url:`${basePath}/pho_calOut/getPageGetRecFormFowLst`,
+                    data:{currentPage:val},
+                    success:function(data){
+                        console.log(data);
+                        that.callRecords=data.rows;
+                        that.pageInit.totalResult=data.total;
+                    }
+                })
+            },
+
+            headerClassName({row,rowIndex}){
+                return 'evrow'
+            },
+            //群呼来电计时器
+            gCallTime(){
+              this.gcallConversationTime=0;
+              let that=this;
+              let s=0;
+              let m=0;
+              let h=0;
+              let gsj = setInterval(function(){
+
+                    that.gcallConversationTime++;
+                    let str_s=s;
+                    let str_m=m;
+                    let str_h=h;
+                    if(s<10){
+                        str_s='0' + s;
+                    }
+                    if(m<10){
+                        str_m='0' + m;
+                    }
+                    if(h<10){
+                        str_h='0' + h;
+                    }
+                    let num=str_h + ":" + str_m + ":" + str_s;
+                    that.gCallinCon=num;
+                    s++;
+                    if(s>59){
+                        s=0;
+                        m++;
+                    }
+                    if(m>59){
+                        s=0;
+                        h++;
+                    }
+                    if(that.gtimerFlag){
+                        window.clearInterval(gsj);
+                    }
+                },1000);
+            },
+            //群呼来电-主动挂断
+            gCallinHangup(num){
+                this.gtimerFlag=true;
+                this.gCallinFlag=false;
+                hangup();
+                if(num==1){
+                    console.log("调用示忙！！！")
+                    this.gCallBreak=true;
+                }
+            },
+            // 群呼来电-意向客户保存
+            gCallYxBtn(){
+                let that=this;
+                console.log("—————————————保存意向客户表单—————————————————")
+                console.log(this.gYxCus);
+
+                if(this.gYxCus.YBC004_TP=="男"){
+                    this.gYxCus.YBC004_TP=1;
+                }else if(this.gYxCus.YBC004_TP=="女"){
+                    this.gYxCus.YBC004_TP=2;
+                }
+                $.ajax({
+                    type:"GET",
+                    url:`${basePath}/pho_group_call/toIntention`,
+                    data:that.gYxCus,
+                    success:function(data){
+                        if(data.msg=='200'){
+                            that.$message({
+                              message: '恭喜你，客户转为意向成功',
+                              type: 'success'
+                            });
+                            that.gCalltoYXFlag=false;
+                        }else if(data.msg=='201'){
+                            let msg="抱歉!该客户当前属于【"+that.gCallDeptCus.deptName+"】部门<"+that.gCallDeptCus.name+">客户经理，请按照重分配规则找对应负责人进行重分配";
+                            that.$confirm(msg, '提示', {
+                                confirmButtonText: '确定',
+                                type: 'warning'
+                              }).then(() => {
+                                  that.gCalltoYXFlag=false;
+                              })
+                        }else if(data.msg=='501'){
+                            that.$message({
+                              message: '客户已转为意向成功，请勿重复提交！',
+                              type: 'warning'
+                            });
+                        }else{
+                            that.$message.error('客户转为意向失败，请重试');
+                        }
+                    }
+                })
+
+            },
+            //群呼来单-是否是系统中的客户
+            gCallName(phone,flowNum){
+                this.gCallinPhone=phone;
+                this.gYxCus={YBC004_TP:'男'};//重置转为意向表单
+                this.gYxCus.YBC003=phone;
+                this.gYxCus.YBCF009=flowNum;
+                console.log('电话号码'+this.gYxCus.YBC003);
+                console.log('流水号'+this.gYxCus.YBCF009);
+                let that=this;
+
+                console.log('__________查找客户姓名______________');
+                $.ajax({
+                    type:"GET",
+                    url:`${basePath}/pho_rec/getNameByTel`,
+                    data:{YBC003:phone},
+                    success:function(data){
+                        if(data.msg=="200"){
+                            if(data.result.YBC001){
+                                that.gYxCus.YBC001=data.result.YBC001;
+                                that.gYxCus.state=1;//存在我们系统
+                                that.gCallinName=data.result.YBC002;
+                                that.gCallDeptCus.deptName=data.result.deptName;
+                                that.gCallDeptCus.name=data.result.YBC029;
+                            }else{
+                                that.gYxCus.YBC001="";
+                                that.gYxCus.state=2;//新用户
+                                that.gCallinName="陌生号码";
+                                that.gCallDeptCus={};
+                            }
+                            console.log(that.gYxCus);
+                        }
+                        that.gCallin();
+                    }
+                })
+            },
+            //群呼来电-写通话记录
+            gCallinRecord(flowNum){
+                let that=this;
+                $.ajax({
+                    type:"GET",
+                    url:`${basePath}/creatToken`,
+                    data:{targerPath:`https://www.resunruixin.com/ruixinCrm/pho_group_call/addFlowForCall`},
+                    success:function(data){
+						console.log("1获取的token==============="+data.result.token);
+						var bastp = `${basePath}`;
+						console.log("basepath===================="+bastp);
+                        if(data.msg=='200'){
+                            var token=data.result.token;
+							console.log("2获取的token============"+token);
+                            $.ajax({
+                                type:"GET",
+                                url:`${basePath}/pho_group_call/addFlowForCall`,
+                                data:{YBC001:that.gYxCus.YBC001,YBCF009:flowNum,token:token},
+                                success:function(data){
+                                    console.log("群呼来电-写入通话记录");
+                                }
+                            })
+                        }
+                    }
+                })
+            },
+
+//            登录外部群呼管理中心
+            gCalllogin(){
+                $.ajax({
+                    type:"POST",
+                    url:"http://192.168.1.241:29002/doLogin",
+                    dataType:'jsonp',
+                    data:{username:'HJZX888',password:'111111'},
+                    success:function(data){
+                    },
+                    complete(xhr,status){
+                        console.log("-----------------登录外部群呼中心成功-----------------")
+                    }
+                })
+            },
+
+
+//            退出登录
+            loginOut(){
+                this.$confirm('此操作将退出登录?', '提示', {
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                  type: 'warning'
+                }).then(() => {
+                    console.log("退出登录")
+                    loginOut();
+                }).catch(() => {
+                });
+            },
+            // 呼叫中心断开
+            onClose(){
+                console.log("————————————与呼叫中心断开连接——————————————")
+                this.$confirm('您与呼叫中心连接已断开，点击确认重新连接呼叫中心', '提示', {
+                  confirmButtonText: '确定',
+                  type: 'warning'
+                }).then(() => {
+                    // location.reload(true);
+                })
+            },
+            qxPwd(){
+                this.pwd={};
+                this.EditFlag=false;
+            },
+            surePwd(){
+                if(this.pwd.PASSWORD != this.pwd.PASSWORD2){
+                    this.$message({
+                      message: '两次输入的密码不一致,请重新输入',
+                      type: 'warning'
+                    });
+                }else if(this.pwd.PASSWORD == this.pwd.PASSWORD2){
+                    let that=this;
+                     $.ajax({
+                        type:"GET",
+                        url:`${basePath}/user/userEditPsw`,
+                        data:{PASSWORD:that.pwd.PASSWORD},
+                        success:function(data){
+                            if(data.msg=="200"){
+                                that.$message({
+                                  message: '恭喜你，密码修改成功',
+                                  type: 'success'
+                                });
+                                that.EditFlag=false;
+                                that.pwd={};
+                            }
+                        }
+                    })
+                }
+            },
+            removeTab(targetName) {
+                let tabs = this.editableTabs;
+                let activeName = this.editableTabsValue;
+                if (activeName === targetName) {
+                  tabs.forEach((tab, index) => {
+                    if (tab.name === targetName) {
+                      let nextTab = tabs[index + 1] || tabs[index - 1];
+                      if (nextTab) {
+                        activeName = nextTab.name;
+                      }
+                    }
+                  });
+                }
+                this.editableTabsValue = activeName;
+                this.editableTabs = tabs.filter(tab => tab.name !== targetName);
+            },
+            clickTab(node){
+                let oldAttr="a[name='"+node.$attrs['data-lname']+"']";
+                console.log(oldAttr);
+                let newNode=document.querySelector(oldAttr);
+
+                if(newNode){
+                    if(oldNode){
+                        oldNode.style.color='#aeb2b7';
+                        oldNode.style.backgroundColor='transparent';
+                    }
+                    newNode.style.color='#fff';
+                    newNode.style.backgroundColor='#d84c31';
+                    oldNode=newNode;
+                }
+            },
+            Answer(){
+
+            },
+            hangup(){
+
+            },
+//            获取客户姓名
+            getCallName(phone){
+                let that=this;
+                $.ajax({
+                    type:"GET",
+                    url:`${basePath}/pho_rec/getNameByTel`,
+                    data:{YBC003:phone},
+                    success:function(data){
+                        if(data.msg=="200"){
+                            if(data.result.YBC001){
+                                that.callinName="来自"+data.result.YBC002+'的来电';
+                            }else{
+                                that.callinName="陌生号码来电";
+                            }
+                        }
+                    }
+                })
+            },
+//            关闭普通来电
+            closeCallIn(done){
+                let that=this;
+                this.$confirm('确认是否关闭普通来电对话框？')
+                  .then(_ => {
+                    done();
+                    that.callInFlag=false;
+                  })
+                  .catch(_ => {});
+            },
+//            关闭群呼来电
+            closegCallIn(done){
+                let that=this;
+                this.$confirm('确认是否关闭群呼来电对话框？如正在通话，也将会被挂断！','提示',{
+                  confirmButtonText: '确定',
+                  type: 'warning'
+                }).then(_ => {
+                    done();
+                    hangup();
+                    that.gCallinFlag=false;
+                })
+            },
+//    普通来电接听的时候，启动定时器
+            timer(){
+                let that=this;
+                let s=0;
+                let m=0;
+                let h=0;
+                let sj = setInterval(function(){
+                        let str_s=s;
+                        let str_m=m;
+                        let str_h=h;
+                        if(s<10){
+                            str_s='0' + s;
+                        }
+                        if(m<10){
+                            str_m='0' + m;
+                        }
+                        if(h<10){
+                            str_h='0' + h;
+                        }
+                        let num=str_h + ":" + str_m + ":" + str_s;
+                        that.callState=num;
+                        s++;
+                        if(s>59){
+                            s=0;
+                            m++;
+                        }
+                        if(m>59){
+                            s=0;
+                            h++;
+                        }
+                        if(that.timerFlag){
+                            window.clearInterval(sj);
+                            that.callState="通话结束";
+                        }
+                    },1000);
+            },
+//    来电接听
+            callInAnswer(){
+                this.callinOnFlag=false;
+                this.callinOnHungFlag=true;
+                this.timerFlag=false;
+//                通话类型--1呼入  2呼出
+                this.YBCF0011_TP=1;
+                //通话状态--1接通 2未接通
+                this.YBCF0010_TP=1;
+                this.timer();
+            },
+//    来电-挂断
+            callInHangup(){
+                this.callinOnFlag=false;
+                this.callinOnHungFlag=false;
+                this.clearTimer();
+            },
+//    清除定时器
+            clearTimer(){
+                this.timerFlag=true
+            }
+        },
+        created(){
+
+        }
+    })
+
+
+    function getMenu(node){
+        if(oldNode){
+            oldNode.style.color='#aeb2b7';
+            oldNode.style.backgroundColor='transparent';
+        }
+        node.style.color='#fff';
+        node.style.backgroundColor='#d84c31';
+        oldNode=node;
+
+        let tabsUrl;
+        let tabsName;
+        if(node.name=='index_v1.html'){
+            tabsUrl='index_v1.html';
+            tabsName="主页";
+        }else{
+            tabsUrl=node.name;
+            tabsName=node.innerHTML;
+        }
+        let newTabs={
+                name:tabsName,
+                url:tabsUrl
+        }
+        let tabsFlag=false;
+        for(let item of App.$data.editableTabs){
+            if(tabsUrl==item.url){
+                tabsFlag=true
+            }
+        }
+        if(tabsFlag){
+            App.$data.editableTabsValue=tabsName;
+            let ifms=document.getElementById(tabsUrl);
+			if(tabsName!="主页"){
+				ifms.contentWindow.location.reload(true);
+			}
+        }else{
+            App.$data.editableTabs.push(newTabs)
+            App.$data.editableTabsValue=tabsName
+        }
+    }
+    //  判断是否有《群呼管理》菜单，点击后才去登录群呼管理中心
+    function lgCallCenter(node){
+        var menu=node.children[1].innerHTML;
+        if(menu=='群呼管理'){
+            App.gCalllogin();
+        }
+    }
+
+</script>
+
+</html>

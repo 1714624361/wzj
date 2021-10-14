@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0">
+
+    <!--360浏览器优先以webkit内核解析-->
+
+    <title>部门管理</title>
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="../static/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="../static/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+    <link href="../static/css/animate.css" rel="stylesheet">
+    <link href="../static/css/style.css?v=4.1.0" rel="stylesheet">
+
+    <link rel="stylesheet" href="../static/element-ui/lib/theme-chalk/index.css">
+
+    <script type="text/javascript">
+        //获取html元素
+        var html = document.getElementsByTagName('html')[0];
+        //屏幕的宽度（兼容处理）
+        var w = document.documentElement.clientWidth || document.body.clientWidth;
+        //750这个数字是根据你的设计图的实际大小来的，所以值具体根据设计图的大小
+        html.style.fontSize = w / 1366 + "px";
+    </script>
+
+    <script src="../static/js/vue.js"></script>
+    <script src="../static/element-ui/lib/index.js"></script>
+    <script src="../static/js/jquery.min.js"></script>
+
+    <style>
+        body{
+            height: 1500px !important;
+            overflow: scroll;
+        }
+        .tips{
+            display: inline-block;
+            padding: .5rem 2rem .5rem 1rem;
+            background-color: #53DD9D;
+            color: #fff;
+            font-size: 16px;
+            border-bottom-right-radius: 2rem;
+            border-top-right-radius: 2rem;
+        }
+        .cusMTable{
+            width: 100%;
+        }
+        .cusMTable .el-table tr{
+            background-color: #4aa5fb;
+            color:#fff;
+        }
+        .el-table .odd-row {
+            background: #f1f7fe !important;
+            color:#878787 !important;
+        }
+        .el-table .even-row {
+            background: #ffffff !important;
+            color:#878787 !important;
+        }
+        .el-input-group__append{
+            color: #4aa5fb !important;
+        }
+        .top_divR{
+            margin-right: 20px;
+        }
+        .testDiv{
+            min-height: 600px;
+            background-color: #fff;
+        }
+        .elBtn{
+            border-radius: 30px !important;
+            padding: 6px 20px !important;
+        }
+/*        // 去掉input[type=number]默认的加减号*/
+        input[type='number'] {
+            -moz-appearance:textfield;
+        }
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .el-table td{
+            padding: 4px 0 !important;
+        }
+        .el-message-box {
+            margin-top: -300px;
+        }
+    </style>
+</head>
+
+<body style="background-color:#f1f7fe;margin:10px;">
+    <div id="productApp" v-cloak>
+        <div style="display:flex;">
+            <div style="width:400px;background-color:#fff;">
+                <div>
+                    部门管理
+                </div>
+                <div>（请点击部门名称进行选择,且只能单选）</div>
+                <el-tree
+                    :data="pageInit"
+                    :props="defaultProps"
+                    ref="tree"
+                    highlight-current
+                    show-checkbox
+                    :default-expanded-keys="zkTreeNode"
+                    accordion
+                    node-key="id"
+                    :expand-on-click-node="false"
+                    @node-click="clikNode">
+                </el-tree>
+
+                <div style="width:100%;margin:10px 0;">你点击选中的是:<span style="color:red;">{{selNode.label}}</span>
+                </div>
+                <div>
+                    <el-button type="primary" icon="el-icon-plus" size="mini" @click="addNewProTs">新增同级部门</el-button>
+                    <el-button type="primary" icon="el-icon-plus" size="mini" @click="addNewProTb">新增下级部门</el-button>
+                </div>
+                <div style="margin:10px 0;">
+                    <el-button type="primary" icon="el-icon-edit" size="mini" @click="editProT">编辑部门信息</el-button>
+                    <el-button type="primary" icon="el-icon-delete" size="mini" @click="delProT">删除部门</el-button>
+                </div>
+            </div>
+            <div style="width: 100%">
+                <div style="margin:10px;">
+                    <el-input placeholder="请输入员工姓名" v-model="soSearch.NAME" style="width:120px;" size="mini" class="top_divR" ></el-input>
+                    <el-input placeholder="请输入员工账号" v-model="soSearch.USERNAME" style="width:120px;" size="mini" class="top_divR" ></el-input>
+                    <el-input placeholder="请输入用户编号" v-model="soSearch.NUMBER" style="width:120px;" size="mini" class="top_divR" ></el-input>
+                <el-button size="mini" type="warning" style="background-color:#fd8c12;" class="top_divR" @click="checkUser">查询</el-button>
+                </div>
+                <div class="cusMTable"
+                v-loading="loading">
+                        <el-table
+                                ref="multipleTable"
+                                :data="tabledata"
+                                :row-class-name="tableRowClassName"
+                                tooltip-effect="dark"
+                                style="width: 100%">
+                            <el-table-column
+                                    prop="DEPT_NAME"
+                                    label="部门名称">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="NAME"
+                                    label="用户姓名">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="USERNAME"
+                                    label="用户账号">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="NUMBER"
+                                    label="用户编号">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="ROLE_NAME"
+                                    label="用户角色">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="POSITION_NAME"
+                                    label="是否主管">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="STATUS_NAME"
+                                    label="是否禁用">
+                            </el-table-column>
+                            <el-table-column label="操作" width="200px">
+                                <template slot-scope="scope">
+                                    <el-button
+                                        type="text"
+                                        size="mini"
+                                        @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+
+                                    <el-button
+                                        size="mini"
+                                        type="danger"
+                                        @click="handleTransfer(scope.$index, scope.row)">变更部门</el-button>
+
+                                    <el-tooltip :content="scope.row.STATUS=='0' ? '禁用' : '启用'" placement="top">
+                                          <el-switch
+                                            v-model="scope.row.STATUS"
+                                            active-color="#13ce66"
+                                            inactive-color="#ccc"
+                                            active-value="0"
+                                            inactive-value="1"
+                                            @change="changeUserDisable(scope.$index, scope.row)">
+                                          </el-switch>
+                                    </el-tooltip>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    <div>
+                        <div style="float:left">
+                            <el-button type="primary" size="mini" @click="addNewProduct">新增人员</el-button>
+                        </div>
+                        <div style="float:right">
+                            <el-pagination
+                                @current-change="handleCurrentChange"
+                                :current-page="page.currentPage"
+                                :page-size="10"
+                                layout="total, prev, pager, next, jumper"
+                                :total="page.total">
+                            </el-pagination>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--        转移部门-->
+        <el-dialog title="变更部门" :visible.sync="dialogTransfer" width="30%">
+            <el-form :model="transferForm" class="demo-ruleForm">
+                <el-form-item label="现所在">
+                    {{transferForm.DEPT_NAME}}
+                </el-form-item>
+                <el-form-item label="变更至">
+                    <el-cascader size="mini" v-model="selParment"
+                        :options="moreAlloatArr1"
+                        placeholder="请选择部门"
+                        change-on-select
+                        @change="handleChangeMore">
+                    </el-cascader>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogTransfer = false">取 消</el-button>
+                <el-button type="primary" @click="sureTransfer">确 定</el-button>
+            </div>
+        </el-dialog>
+
+        <el-dialog :title="addNewProName" :visible.sync="editProduct" width="60%" top="5vh">
+            <el-form :model="ruleForm" ref="ruleForm" label-width="150px" class="demo-ruleForm">
+                <div style="display:flex;">
+                    <el-form-item label="所在部门" style="width:50%;">
+                        <span>{{ruleForm.DEPT_NAME}}</span>
+                    </el-form-item>
+                    <el-form-item label="是否主管" style="width:50%;"   prop="POSITION"
+                    :rules="[
+                      { required: true, message: '不能为空'}
+                    ]">
+                        <el-select v-model="ruleForm.POSITION" placeholder="请选择" style="width:80%">
+                            <el-option label="主管" value="1"></el-option>
+                            <el-option label="员工" value="2"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </div>
+                <div style="display:flex;">
+                    <el-form-item label="用户角色" style="width:50%;">
+                        <el-select  v-model="ruleForm.ROLE_ID" placeholder="请选择" style="width:80%">
+                            <el-option
+                                v-for="item in roleArr"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="用户姓名" style="width:50%;"   prop="NAME"
+                    :rules="[
+                      { required: true, message: '姓名不能为空'}
+                    ]">
+                        <el-input type="NAME" v-model="ruleForm.NAME" style="width:80%"></el-input>
+                    </el-form-item>
+                </div>
+                <div style="display:flex;">
+                    <el-form-item label="用户账号" style="width:50%;" prop="USERNAME"
+                    :rules="[
+                      { required: true, message: '账号不能为空'}
+                    ]">
+                        <el-input type="USERNAME" v-model="ruleForm.USERNAME" style="width:80%"></el-input>
+                    </el-form-item>
+                    <el-form-item label="用户编号" style="width:50%;" prop="NUMBER"
+                    :rules="[
+                      { required: true, message: '编号不能为空'}
+                    ]">
+                        <!-- <el-input v-model="ruleForm.NUMBER" style="width:80%"></el-input> -->
+                        <el-autocomplete v-model="ruleForm.NUMBER"  :fetch-suggestions="querySearchAsync" placeholder="请输入或选择用户编号" style="width:80%"></el-autocomplete>
+                    </el-form-item>
+                </div>
+                <div style="display:flex;">
+                    <el-form-item label="用户密码" style="width:50%;">
+                        <el-input type="password" v-model="ruleForm.PASSWORD" style="width:80%"></el-input>
+                    </el-form-item>
+                    <el-form-item label="确认密码" style="width:50%;">
+                        <el-input type="password" v-model="ruleForm.surePassword" style="width:80%"></el-input>
+                    </el-form-item>
+                </div>
+                <div style="display:flex;">
+                    <el-form-item label="角色级别" style="width:50%;">
+                        <el-select v-model="ruleForm.LEV" placeholder="请选择" style="width:80%">
+                            <el-option label="实习经理" value="0"></el-option>
+                            <el-option label="初级经理" value="1"></el-option>
+                            <el-option label="中级经理" value="2"></el-option>
+                            <el-option label="高级经理" value="3"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="手机号码" style="width:50%;">
+                        <el-input type="number" v-model="ruleForm.PHONE" style="width:80%"></el-input>
+                    </el-form-item>
+                </div>
+                <div style="display:flex;">
+                    <el-form-item label="银行名称" style="width:50%;">
+                        <el-input v-model="ruleForm.BANKNAME" style="width:80%"></el-input>
+                    </el-form-item>
+                    <el-form-item label="银行卡号" style="width:50%;">
+                        <el-input type="number" v-model="ruleForm.BANKCARD" style="width:80%"></el-input>
+                    </el-form-item>
+                </div>
+                <div style="display:flex;">
+                    <el-form-item label="用户生日" style="width:50%;">
+                        <el-date-picker
+                          v-model="ruleForm.BIRTHDAY"
+                          type="date"
+                          value-format="yyyy-MM-dd"
+                          placeholder="选择日期" style="width:80%">
+                        </el-date-picker>
+                    </el-form-item>
+                    <el-form-item label="E-mail" style="width:50%;">
+                            <el-input v-model="ruleForm.EMAIL" style="width:80%"></el-input>
+                        </el-form-item>
+                </div>
+                <el-form-item>
+                    <el-button type="primary" style="margin-left:35%" @click="submitForm">立即保存</el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
+        <el-dialog :title="addTName" :visible.sync="addproT" width="30%" top="5vh">
+            <el-form :model="newSproTForm" ref="newSproTForm" label-width="150px" class="demo-ruleForm">
+                <el-form-item label="当前选中部门：">
+                    <span>{{selName}}</span>
+                </el-form-item>
+                <el-form-item label="新增部门名称：">
+                  <el-input v-model="newSproTForm.DEPT_NAME" style="width:80%"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="adNewProTform">立即保存</el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
+        <el-dialog title="编辑部门" :visible.sync="editproTFg" width="30%" top="5vh">
+            <el-form :model="editSproTForm" label-width="150px" class="demo-ruleForm">
+                <el-form-item label="当前选中部门：">
+                    <el-input v-model="editSproTForm.DEPT_NAME"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="editProTform">立即保存</el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
+    </div>
+</body>
+<script th:inline="javascript">
+    var basePath="/"+window.location.pathname.split("/")[1];
+    let app=window.parent.App;
+
+    new Vue({
+        el:"#productApp",
+        data(){
+            return {
+//                从后台模板里面获取
+                pageInit:[],//树形部门类型数据
+                defaultProps: {
+                  children: 'children',
+                  label: 'label'
+                },
+                tabledata:null,//部门列表数据
+                page:{currentPage:1,total:1},
+                addNewProName:"修改部门信息",
+//                新增部门或修改部门判断     false默认为修改部门，true为新增
+                newEdietFlag:false,
+//                新增部门-修改部门修改部门表单
+                editProduct:false,
+//                新增部门-修改部门信息表单
+                ruleForm:{},
+//                当前选中的部门类型node
+                selNode:{},
+//                选中的部门类型名称
+                selName:"",
+//                新增部门类型
+                addproT:false,
+//                判断新增同级还是下级--默认添加同级
+                addProTSBFlag:true,
+//                新增部门表单
+                newSproTForm:{DEPT_NAME:"",DEPT_PID:""},
+                addTName:"新增同级部门",
+//                编辑部门
+                editproTFg:false,
+                editSproTForm:{DEPT_NAME:"",DEPT_ID:""},
+//                默认展开的树节点
+                zkTreeNode:[],
+//                获取所有部门
+                deptArr:[],
+//                获取用户角色
+                roleArr:[],
+                pwd0:"",
+                loading:false,
+//                搜索
+                soSearch:{},
+                dialogTransfer:false,
+                transferForm:{},
+                selParment:[],
+                moreAlloatArr1:[]
+
+            }
+        },
+//        DOM渲染前执行
+        mounted(){
+            this.getProductTs();
+            this.getDeptArr();
+            this.getRoleArr();
+            this.getDepartment();
+        },
+        methods:{
+          // 2018.6.29新增用户编号选择
+            querySearchAsync(queryString, cb) {
+                console.log(111111111)
+                $.ajax({
+                    type:"GET",
+                    url:`${basePath}/user/getUserFreeSeatsNumber`,
+                    data:"",
+                    success:function(data){
+                        console.log(data);
+                        if(data.msg=="200"){
+                            var arr=data.result;
+                            for(var i=0;i<arr.length;i++){
+                                 if(arr[i].value=='8151'){
+                                      arr.splice(i,1);
+                                 }
+                                 if(i==arr.length-1){
+                                     cb(arr);
+                                 }
+                            }
+                        }
+                    }
+                })
+            },
+            //            获取部门列表
+            getDepartment(){
+//                DEPT_ID   获取部门
+                let that=this;
+                $.ajax({
+                    type:"GET",
+                    url:`${basePath}/user/searchDeptAndMeAllLst`,
+                    data:"",
+                    success:function(data){
+                        console.log(data);
+                        if(data.msg=="200"){
+                            that.moreAlloatArr1=data.result;
+                        }
+                    }
+                })
+            },
+//            查询
+            checkUser(){
+                if(this.soSearch.NAME || this.soSearch.USERNAME || this.soSearch.NUMBER){
+                    this.loading=true;
+                    let that=this;
+                    $.ajax({
+                        type:"GET",
+                        url:`${basePath}/user/userForDeptLst`,
+                        data:that.soSearch,
+                        success:function(data){
+                            if(data.msg="200"){
+                               //异步请求并刷新右侧列表数据
+                                that.tabledata = data.rows;
+                                that.page.total = data.total;
+                                that.page.currentPage=1;
+                                that.loading=false;
+                            }
+                        }
+                    })
+                }else{
+                    this.$message({
+                          showClose: true,
+                          message: '请填写搜索内容！',
+                          type: 'error'
+                    });
+                }
+            },
+//            获取所有部门Tree结构
+            getProductTs(){
+                let that=this;
+                $.ajax({
+                    type:"GET",
+                    url:`${basePath}/dept/getTreeDeptLst`,
+                    data:"",
+                    success:function(data){
+                        if(data.msg="200"){
+                            that.pageInit=data.result;
+                            for(let item of (data.result)[0].children){
+                                that.zkTreeNode.push(item.id);
+                            }
+                        }
+                    }
+                })
+            },
+//            获取所有部门多级联动结构
+            getDeptArr(){
+                 let that=this;
+                $.ajax({
+                    type:"GET",
+                    url:`${basePath}/user/deptAllLst`,
+                    data:"",
+                    success:function(data){
+                        if(data.msg="200"){
+                            that.deptArr=data.result;
+                        }
+                    }
+                })
+            },
+//            获取用户角色
+            getRoleArr(){
+                 let that=this;
+                $.ajax({
+                    type:"GET",
+                    url:`${basePath}/user/roleSelectAllLst`,
+                    data:"",
+                    success:function(data){
+                        if(data.msg="200"){
+                            var arr=data.result;
+                            for(var i=0;i<arr.length;i++){
+                              if(arr[i].value=='1'){
+                                arr.splice(i,1);
+                              }
+                            }
+                            that.roleArr=arr;
+                        }
+                    }
+                })
+            },
+            //编辑人员信息
+            handleEdit(index, row) {
+                console.log(index, row);
+                this.addNewProName="修改员工信息"
+                this.newEdietFlag=false;
+                this.pwd0=row.PASSWORD;
+                this.ruleForm=row;
+                if(this.ruleForm.POSITION==1){
+                    this.ruleForm.POSITION="主管"
+                }else if(this.ruleForm.POSITION==2){
+                    this.ruleForm.POSITION="员工"
+                }
+                if(this.ruleForm.LEV==0){
+                    this.ruleForm.LEV="实习经理"
+                }else if(this.ruleForm.LEV==1){
+                    this.ruleForm.LEV="初级经理"
+                }else if(this.ruleForm.LEV==2){
+                    this.ruleForm.LEV="中级经理"
+                }else if(this.ruleForm.LEV==3){
+                    this.ruleForm.LEV="高级经理"
+                }
+                this.editProduct=true;
+            },
+//            新增部门-同级
+            addNewProTs(){
+                this.addProTSBFlag=true;
+                this.addTName="新增同级部门";
+
+                if(this.selNode.id){
+                    this.selName=this.selNode.label;
+                    this.newSproTForm.DEPT_PID=this.selNode.pid;
+                    this.addproT=true;
+                }else{
+                    this.$message.error('请点击选中部门！');
+                }
+
+            },
+//            新增部门-下级
+            addNewProTb(){
+                this.addProTSBFlag=false;
+                this.addTName="新增下级部门";
+
+                if(this.selNode.id){
+                    this.selName=this.selNode.label;
+                    this.newSproTForm.DEPT_PID=this.selNode.id;
+                    this.addproT=true;
+                }else{
+                    this.$message.error('请点击选中部门！');
+                }
+            },
+//            新增部门提交
+            adNewProTform(){
+                let that=this;
+                if(this.addProTSBFlag){
+//                    新增同级部门类型
+                    $.ajax({
+                        type:"GET",
+                        url:`${basePath}/dept/addDept`,
+                        data:that.newSproTForm,
+                        success:function(data){
+                            if(data.msg="200"){
+                                that.$message({
+                                    message: '恭喜你，新增部门成功',
+                                    type: 'success'
+                                });
+                                that.addproT=false;
+                                that.getProductTs();
+                            }else{
+                                that.$message.error('新增部门失败，请重新新增');
+                            }
+                        }
+                    })
+                }else{
+//                    新增下级部门类型
+                    $.ajax({
+                        type:"GET",
+                        url:`${basePath}/dept/addDept`,
+                        data:that.newSproTForm,
+                        success:function(data){
+                            if(data.msg="200"){
+                                that.$message({
+                                    message: '恭喜你，新增部门成功',
+                                    type: 'success'
+                                });
+                                that.addproT=false;
+                                that.getProductTs();
+                            }else{
+                                that.$message.error('新增部门失败，请重新新增');
+                            }
+                        }
+                    })
+                }
+            },
+//            编辑部门
+            editProT(){
+                if(this.selNode.id){
+                    this.editSproTForm.DEPT_NAME=this.selNode.label;
+                    this.editSproTForm.DEPT_ID=this.selNode.id;
+                    this.editproTFg=true;
+                }else{
+                    this.$message.error('请点击选中部门！');
+                }
+            },
+//            编辑部门保存
+            editProTform(){
+                let that=this;
+                $.ajax({
+                    type:"GET",
+                    url:`${basePath}/dept/updateDept`,
+                    data:that.editSproTForm,
+                    success:function(data){
+                        if(data.msg="200"){
+                            that.$message({
+                                message: '恭喜你，编辑部门成功',
+                                type: 'success'
+                            });
+                            that.editproTFg=false;
+                            that.getProductTs();
+                        }else{
+                            that.$message.error('编辑部门失败，请重新编辑');
+                        }
+                    }
+                })
+            },
+//            删除部门
+            delProT(){
+                let that=this;
+
+                if(this.selNode.id){
+                    if(this.selNode.children || this.page.total>0){
+                        this.$message({
+                            message: '该部门不符合删除条件，不能删除！',
+                            type: 'warning'
+                        });
+                    }else{
+                      this.$confirm(`此操作将永远删除${this.selNode.label}部门, 是否继续?`, '提示', {
+                          confirmButtonText: '确定',
+                          cancelButtonText: '取消',
+                          type: 'warning'
+                        }).then(() => {
+                            $.ajax({
+                            type:"GET",
+                            url:`${basePath}/dept/delDept`,
+                            data:{DEPT_ID:that.selNode.id},
+                            success:function(data){
+                                if(data.msg="200"){
+                                    that.$message({
+                                        message: '恭喜你，删除部门成功',
+                                        type: 'success'
+                                    });
+                                    that.editproTFg=false;
+                                    that.getProductTs();
+                                }else{
+                                    that.$message.error('删除部门失败，请重新删除');
+                                }
+                            }
+                        })
+                        }).catch(() => {
+
+                        });
+                    }
+
+                }else{
+                    this.$message.error('请点击选中部门！');
+                }
+            },
+//            新增人员
+            addNewProduct(){
+                if(this.selNode.id){
+                    this.ruleForm={DEPT_ID:this.selNode.id,DEPT_NAME:this.selNode.label};
+                    this.addNewProName="新增人员"
+                    this.newEdietFlag=true;
+                    this.editProduct=true;
+                    this.ruleForm
+                }else{
+                   this.$message.error('请点击选中部门！');
+                }
+
+            },
+            Trim(str,is_global){
+                var result;
+                result = str.replace(/(^\s+)|(\s+$)/g,"");
+                if(is_global.toLowerCase()=="g")
+                {
+                result = result.replace(/\s/g,"");
+                }
+                return result;
+            },
+//            表单编辑后提交
+            submitForm(){
+                let that=this;
+                if(this.newEdietFlag){
+
+//                    为新增部门
+                    console.log("增加新员工");
+                    if(this.ruleForm.POSITION && this.ruleForm.NAME){
+                        if(this.ruleForm.USERNAME && this.ruleForm.NUMBER){
+                            if(this.ruleForm.PASSWORD && this.ruleForm.PASSWORD.length>0){
+                                if(this.ruleForm.PASSWORD==this.ruleForm.surePassword){
+                                    this.ruleForm.USERNAME=this.Trim(this.ruleForm.USERNAME,'g')
+                                    console.log('用户账号');
+                                    console.log(this.ruleForm.USERNAME);
+                                    $.ajax({
+                                        type:"GET",
+                                        url:`${basePath}/user/userAdd`,
+                                        data:that.ruleForm,
+                                        success:function(data){
+                                            console.log(data);
+                                            if(data.msg=="200"){
+                                                that.$message({
+                                                    message: '恭喜你，新增人员成功',
+                                                    type: 'success'
+                                                });
+                                                if(that.selNode.id){
+                                                    that.handleCurrentChange(1);
+                                                }
+                                                that.editProduct=false;
+                                            }else if(data.msg=="201"){
+                                                that.$message.error(data.result);
+                                            }else if(data.msg=="502"){
+                                                that.$message.error(data.result);
+                                            }else{
+                                                that.$message.error('新增人员失败，请重新新增');
+                                            }
+                                        }
+                                    })
+                                }else{
+                                    that.$message.error('两次密码不一致，请重新确认后输入');
+                                }
+                            }else{
+                                that.$message.error('请输入密码！');
+                            }
+                        }else{
+                            that.$message.error('请完善表单！');
+                        }
+                    }else{
+                        that.$message.error('请完善表单！');
+                    }
+
+                }else{
+//                    为修改部门
+                    console.log("修改新员工");
+                    if(this.pwd0==this.ruleForm.PASSWORD){
+                        this.ruleForm.pswIsTrue="0"
+                    }else{
+                        this.ruleForm.pswIsTrue="1"
+                    }
+
+                    if(this.ruleForm.POSITION=="主管"){
+                        this.ruleForm.POSITION=1
+                    }else if(this.ruleForm.POSITION=="员工"){
+                        this.ruleForm.POSITION=2
+                    }
+                    if(this.ruleForm.LEV=="实习经理"){
+                        this.ruleForm.LEV=0
+                    }else if(this.ruleForm.LEV=="初级经理"){
+                        this.ruleForm.LEV=1
+                    }else if(this.ruleForm.LEV=="中级经理"){
+                        this.ruleForm.LEV=2
+                    }else if(this.ruleForm.LEV=="高级经理"){
+                        this.ruleForm.LEV=3
+                    }
+                    if(this.ruleForm.pswIsTrue=="1"){
+                        if(this.ruleForm.PASSWORD==this.ruleForm.surePassword){
+                            $.ajax({
+                                type:"GET",
+                                url:`${basePath}/user/userEdit`,
+                                data:that.ruleForm,
+                                success:function(data){
+                                    if(data.msg=="200"){
+                                        that.$message({
+                                            message: '恭喜你，修改成功',
+                                            type: 'success'
+                                        });
+                                        that.handleCurrentChange(1);
+                                        that.editProduct=false;
+                                    }else if(data.msg=="201"){
+                                        that.$message.error(data.result);
+                                    }else{
+                                        that.$message.error('修改失败，请重新修改');
+                                    }
+                                }
+                            })
+                        }else{
+                            that.$message.error('两次密码不一致，请重新确认后输入');
+                        }
+                    }else{
+                        $.ajax({
+                            type:"GET",
+                            url:`${basePath}/user/userEdit`,
+                            data:that.ruleForm,
+                            success:function(data){
+                                if(data.msg=="200"){
+                                    that.$message({
+                                        message: '恭喜你，修改成功',
+                                        type: 'success'
+                                    });
+                                    that.handleCurrentChange(1);
+                                    that.editProduct=false;
+                                }else if(data.msg=="201"){
+                                    that.$message.error(data.result);
+                                }else{
+                                    that.$message.error('修改失败，请重新修改');
+                                }
+                            }
+                        })
+                    }
+                }
+
+            },
+
+//            转移部门
+            handleTransfer(index, row) {
+                console.log(row);
+                this.transferForm=row;
+                this.selParment=[];
+                this.dialogTransfer=true;
+
+            },
+            handleChangeMore(value){
+//                console.log(value);
+            },
+//            确认转移部门
+            sureTransfer(){
+                let that=this;
+                console.log(this.selParment);
+                let DEPT_ID=(this.selParment[this.selParment.length-1]).DEPT_ID;
+                let DEPT_LAYERORDER=(this.selParment[this.selParment.length-1]).DEPT_LAYERORDER;
+                console.log(DEPT_ID);
+                console.log(DEPT_LAYERORDER);
+                if(DEPT_ID==this.transferForm.DEPT_ID){
+                    this.$message.error('已经在同一个部门下，不需要进行变更，请重新选择');
+                }else{
+                    let obj={
+                        USER_ID:this.transferForm.USER_ID,
+                        DEPT_ID:DEPT_ID,
+                        DEPT_LAYERORDER:DEPT_LAYERORDER
+                    }
+                    console.log(obj);
+                    this.$confirm('此操作将进行人员的部门变更, 是否继续?', '提示', {
+                      confirmButtonText: '确定',
+                      cancelButtonText: '取消',
+                      type: 'warning'
+                    }).then(() => {
+                        $.ajax({
+                            type:"GET",
+                            url:`${basePath}/user/changeDept`,
+                            data:obj,
+                            success:function(data){
+                                if(data.msg=="200"){
+                                    that.$message({
+                                        message: '恭喜你，变更部门成功',
+                                        type: 'success'
+                                    });
+
+                                    that.dialogTransfer=false;
+                                    that.handleCurrentChange(1);
+                                }else{
+                                    that.$message.error("变更部门失败，请重试");
+                                }
+                            }
+                        })
+                    }).catch(() => {
+                      this.$message({
+                        type: 'info',
+                        message: '已取消变更'
+                      });
+                    });
+
+                }
+            },
+//            表格间隔行变色
+            tableRowClassName({row,rowIndex}){
+                if(rowIndex==1){
+
+                }else if (rowIndex%2 == 0) {
+                    return 'odd-row';
+                }
+                return 'even-row';
+            },
+            //左侧树操作节点方法
+//            renderContent(h, { node, data, store }) {
+//                return ("11");
+//              },
+//            当前页翻页
+            handleCurrentChange(val){
+                this.loading=true;
+                let that=this;
+                if(this.soSearch.NAME || this.soSearch.USERNAME){
+                    $.ajax({
+                        type:"GET",
+                        url:`${basePath}/user/userForDeptLst`,
+                        data:{currentPage:val,NAME:that.soSearch.NAME,USERNAME:that.soSearch.USERNAME},
+                        success:function(data){
+                            if(data.msg="200"){
+                               //异步请求并刷新右侧列表数据
+                                that.tabledata = data.rows;
+                                that.page.total = data.total;
+                                that.page.currentPage=val;
+                                that.loading=false;
+                            }
+                        }
+                    })
+                }else{
+                    $.ajax({
+                        type:"GET",
+                        url:`${basePath}/user/userForDeptLst`,
+                        data:{currentPage:val,DEPT_ID:that.selNode.id},
+                        success:function(data){
+                            if(data.msg="200"){
+                               //异步请求并刷新右侧列表数据
+                                that.tabledata = data.rows;
+                                that.page.total = data.total;
+                                that.page.currentPage=val;
+                                that.loading=false;
+                            }
+                        }
+                    })
+                }
+            },
+            //选中事件
+             clikNode(node, data) {
+                 console.log(node);
+                 this.selNode=node;
+                 this.soSearch.NAME="";
+                 this.soSearch.USERNAME="";
+                 this.$refs.tree.setCheckedNodes([node])
+                 let that = this;
+                //获取选中数据
+                $.ajax({
+                    type:"GET",
+                    url:`${basePath}/user/userForDeptLst`,
+                    data:{DEPT_ID:that.selNode.id},
+                    success:function(data){
+                       //异步请求并刷新右侧列表数据
+                        that.tabledata = data.rows;
+                        that.page.total = data.total;
+                        that.page.currentPage=1;
+                    }
+                })
+            },
+//            改变用户禁用状态
+            changeUserDisable(index,row){
+                let that = this;
+                $.ajax({
+                    type:"GET",
+                    url:`${basePath}/user/userDisableEdit`,
+                    data:{USER_ID:row.USER_ID,STATUS:row.STATUS},
+                    success:function(data){
+                       //异步请求并刷新右侧列表数据
+                        that.handleCurrentChange(1);
+                    }
+                })
+            }
+        }
+    })
+
+</script>
+</html>

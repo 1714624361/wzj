@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0">
+
+    <!--360浏览器优先以webkit内核解析-->
+
+
+    <title> - 主页示例</title>
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="static/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="static/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+    <link href="static/css/animate.css" rel="stylesheet">
+    <link href="static/css/style.css?v=4.1.0" rel="stylesheet">
+
+    <link rel="stylesheet" href="static/element-ui/lib/theme-chalk/index.css">
+
+    <script type="text/javascript">
+        //获取html元素
+        var html = document.getElementsByTagName('html')[0];
+        //屏幕的宽度（兼容处理）
+        var w = document.documentElement.clientWidth || document.body.clientWidth;
+        //750这个数字是根据你的设计图的实际大小来的，所以值具体根据设计图的大小
+        html.style.fontSize = w / 1366 + "px";
+    </script>
+
+    <script src="static/js/echarts.js"></script>
+    <script src="static/js/essos.js"></script>
+    <script src="static/js/vue.js"></script>
+    <script src="static/element-ui/lib/index.js"></script>
+    <script src="static/js/jquery.min.js"></script>
+
+    <style>
+        html,body{
+            height: 1500px !important;
+            overflow: scroll;
+        }
+
+        a{
+            text-decoration: none;
+            color: #fff;
+        }
+        .callMenuL{
+            width: 40%;
+            height: 180px;
+            background-color: #54de9e;
+            text-align: center;
+        }
+        .callMenuL img{
+            width: 30px;
+            height: 30px;
+            margin-top: 65px;
+        }
+        .callMenuR{
+            width: 60%;
+            padding: 0 2px;
+            background-color: #fff;
+            text-align: left;
+        }
+        .callMenuR img{
+            width: 20px;
+        }
+        .callMenuR div{
+            padding:20px 5px 15px 5px;
+            border-bottom: 1px solid #ccc;
+        }
+        .callMenuR div:last-child{
+            border-bottom: 0;
+        }
+        .callSpan1{
+            margin-left: 1rem;
+            font-size: 12px;
+        }
+        .callSpan2{
+            color:#000;
+            font-size: 14px;
+            float: right
+        }
+        .selectDiv{
+            margin: 0 10px;
+            line-height: 30px;
+            font-size: 14px;
+        }
+        .tips{
+            display: inline-block;
+            padding: .5rem 1rem;
+            background-color: #54de9e;
+            color: #fff;
+            font-size: 12rem;
+            border-bottom-right-radius: 2rem;
+            border-top-right-radius: 2rem;
+        }
+        .toBeDealt{
+            width: 100%;
+            border-bottom: .1rem solid #ccc;
+            padding-left:1rem;
+            font-size: 14rem;
+            display: flex;
+        }
+        .tipsA{
+            display: none;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            font-size: 12px;
+
+        }
+        .cusMTable{
+            max-height: 400px;
+            overflow-y: scroll;
+        }
+        .cusMTable .el-table tr{
+            background-color: #4aa5fb;
+            color:#fff;
+        }
+        .el-table .odd-row {
+            background: #f1f7fe !important;
+            color:#878787 !important;
+        }
+        .el-table .even-row {
+            background: #ffffff !important;
+            color:#878787 !important;
+        }
+        .tipsA:hover{
+        	color:#4aa5fb;
+        }
+        .dealtText{
+            width:20rem;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            padding:1rem 0;
+            font-size: 12rem;
+        }
+        .toBeDealt:hover .tipsA{
+            display: inline-block;
+        }
+        .toBeDealt:hover .dealtText{
+            width:13rem;
+        }
+
+        .completed{
+            padding: 1rem 0 1rem 1rem;
+            border-bottom: .1rem solid #ccc;
+        }
+        .completedText{
+            width:16rem;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            font-size: 12rem;
+        }
+        .messageTips{
+            padding: 1rem 0 1rem 1rem;
+            border-bottom: .1rem solid #ccc;
+            font-size: 12rem;
+            display: flex;
+        }
+        .messageTips div:first-child{
+            flex-grow:1;
+            width:14rem;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+        }
+        .messageTips div:last-child{
+            color:#ccc;
+            font-size:6rem;
+        }
+        .el-tabs__header{
+    		margin-bottom:0 !important;
+    	}
+        .callMenuText{
+            color: #fff;
+            font-size: 16px;
+        }
+        .unComplete{
+            position: absolute;
+            left: 40px;
+            top: 40px;
+            font-size: 30px;
+            color:#DEDDDE;
+        }
+        .vComplete{
+            position: absolute;
+            left: 65px;
+            top: 25px;
+            transform: rotate(20deg);
+            font-size: 80px;
+            color:#DEDDDE;
+        }
+        .nComplete{
+            position: absolute;
+            left: 80px;
+            top: 75px;
+            font-size: 30px;
+            color:#C825FD;
+        }
+        .backlog .el-tabs__nav-scroll{
+            margin-left: 20px;
+        }
+        .el-dialog__header {
+            padding: 15px 0px 10px !important;
+        }
+        .el-dialog__title{
+            border-left: 4px solid #4BA5FD;
+            padding-left: 10px;
+        }
+/*        // 去掉input[type=number]默认的加减号*/
+        input[type='number'] {
+            -moz-appearance:textfield;
+        }
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .small-font{
+　　　       font-size:12px;
+            -webkit-transform-origin-x: 0;
+            -webkit-transform: scale(0.90);
+        }
+        .smallsize-font {
+ 　　　　       font-size:10.8px;
+       　}
+
+        .collapseDIV .el-collapse-item__header{
+            margin-left: 10px !important;
+        }
+        .version{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12rem;
+            padding: 5px 10px;
+            background-color: #409eff;
+            color: #fff;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .vlb{
+            width: 15px;
+            height: 15px;
+            background:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA+ElEQVQ4T62TvUpDQRCFvyN2Qi6YRoSQJpBKUthbiJUWCkKeIi+SJu8RSJFGiPgkFlqIrT9vcGTDXVlv9v4Q3HbOfLNzZkY0PNuHwFDSS51MdQHbPWADHEmapDrbY2Au6S4LsD0CnoED4F3SIALK5BVwK+l1B2D7GnhIKv4CqslBswXYvgQugD4wq7S1Bdg+BR5j5aiR7QL4bvAy/cGxpM9UGwChv7cugJymM8D2FFhWIIPOgNo9+I8WgolfcSKZSqmJfUkff0wsx3gPnLWM8QR42hljtaLtq1IYQ+2LlIHsv8rJzodjWgOFpPPMMS0k3dReY9OZp7EfEip6KjCuC7UAAAAASUVORK5CYII=") center no-repeat;
+        }
+        .vlb div{
+            width: 6px;
+            height: 15px;float: right;
+            background-color: #409eff;
+            animation-name: verchange;           /*动画的名字*/
+            animation-duration: 500ms;     /*定义动画完成一个周期所需要的时间，以秒或毫秒计*/
+            animation-iteration-count: infinite;        /*定义动画的播放次数，这里是无限播放*/
+            animation-direction: alternate;         /*定义是否应该轮流反向播放动画，这里是动画轮流播放*/
+        }
+        @keyframes verchange {
+          0% {
+              width: 0px;
+          }
+          100% {
+              width: 6px;
+          }
+        }
+        .version div:nth-child(2){
+            flex-grow: 1;
+            margin-left: 10px;
+        }
+        .verUl{
+            list-style-type: disc;
+            padding-left: 25px;
+            padding-bottom: 30px;
+        }
+        .verUl li{
+            font-size: 12px;
+            padding: 5px 0;
+        }
+    </style>
+</head>
+
+<body style="background-color:#f1f7fe;margin:0;">
+    <div id="index_v1App">
+        欢迎使用本系统
+    </div>
+</body>
+<script src="static/js/validate.js"></script>
+<script  th:inline="javascript">
+
+    var basePath="/"+window.location.pathname.split("/")[1];
+    let app=window.parent.App;
+
+    var index_v1App=new Vue({
+        el:"#index_v1App",
+        data(){
+            return {
+                seatSate:false,
+                callNumTotal:0,
+                callTimeTotal:"0",
+                callDone:"0%",
+                userNewNum:0,
+                userNewTreated:0,
+                userNumTotal:0,
+                pickerOptions: {
+                  shortcuts: [{
+                    text: '最近一周',
+                    onClick(picker) {
+                      const end = new Date();
+                      const start = new Date();
+                      start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                      picker.$emit('pick', [start, end]);
+                    }
+                  }, {
+                    text: '最近一个月',
+                    onClick(picker) {
+                      const end = new Date();
+                      const start = new Date();
+                      start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                      picker.$emit('pick', [start, end]);
+                    }
+                  }, {
+                    text: '最近三个月',
+                    onClick(picker) {
+                      const end = new Date();
+                      const start = new Date();
+                      start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                      picker.$emit('pick', [start, end]);
+                    }
+                  }]
+                },
+                cycleTime:[],
+                options: [],
+                selectedOptions:[],
+                toBeDealt:[],
+                completed:[],
+                message:[],
+//                添加事项
+                addMatter:false,
+                addMtt:{text:'',remind:false,timeType:1,time:''},
+                inputDealtValue:"",
+                searchCustomer:false,
+                inputSearchCustomer:"",
+//                新增客户
+                addNewCustomer:false,
+//                新增客户表单
+                ruleForm: {
+                    YBC004_TP:"男",
+                    YBC018_TP:"A",
+                    YBC009_TP:"未婚"
+                },
+//                新增客户表单验证
+                rules: {
+                  YBC003: [
+                    { required: true, message: '请输入手机号码', trigger: 'blur' },
+                    { min: 11, max: 13, message: '长度在 11 到 13 个字符', trigger: 'blur' }
+                  ],
+                    SOURCE:[ { required: true, message: '请选择客户来源'}]
+                },
+//                添加新客户号码存在，阻止新增客户
+                newCusPhoneFg:false,
+                yjName:[],
+                yjNum:[],
+                qdName:[],
+                qdNum:[],
+                getCtForMonth:[],
+                signList:[],
+
+//                查询排行榜
+                checkPd:{DEPT_LAYERORDER_Sea:"",startTm:"",endTm:""},
+                callSeat:false,
+                cusTableLstInit:[],
+                pageInit:{},
+                soCusFg:false,
+                loading:false,
+                cusCallBusy:false,
+//                2018.5.27增加坐席号显示
+                callNumber:'',
+                // 2018.6.25增加版本详细信息
+                version:{},
+                verFlag:true,
+
+                queueFlag:false,//是否是群呼队列
+                souOptions:[]
+
+            }
+        },
+        mounted(){
+
+            this.getRankForSign();
+            this.getCtForMonths();
+
+            this.getCallInfo();
+            if(app.$data.callSeat){
+                this.callSeat=true;
+            }else{
+                this.callSeat=false;
+            }
+
+            //是否是群呼队列
+            if(app.$data.gCallQueue){
+                this.queueFlag=true;
+            }else{
+                this.queueFlag=false;
+            }
+
+
+            console.log("——————————第四个是否是坐席————————————————");
+            console.log(this.callSeat);
+
+            this.doMattereds();
+            this.doMatters();
+            this.getOptions();
+            this.getCusNums();
+
+            this.getsignList();
+
+            // 2018.6.25增加版本详细信息
+            this.getversion();
+
+
+//                2018.5.27增加坐席号显示
+            this.callNumber=app.callNumber;
+            this.getSourceTypeList();
+
+        },
+        methods:{
+            getSourceTypeList(){
+                let that=this;
+                $.ajax({
+                    type:"GET",
+                    url:`${basePath}/souf/getMBList`,
+                    data:{YBC_LAB004_TP:4},
+                    success:function(data){
+                        console.log(data);
+                        if(data.msg="200"){
+                            that.souOptions=data.result;
+                        }
+                    }
+                })
+            },
+
+          // 2018.6.25增加版本详细信息
+            getversion(){
+                let that=this;
+                $.ajax({
+                    type:"GET",
+                    url:basePath+"/vers_msg/getVersionsMsgById",
+                    data:{},
+                    success:function(data){
+                        if(data.msg="200"){
+                            that.version=data.result;
+                        }
+                    }
+                })
+            },
+            soCus(){
+                if(this.inputSearchCustomer.length>0){
+                    this.soCusPage(1);
+                    this.soCusFg=true;
+                }else{
+                    this.$message({
+                      message: '请输入搜索内容！',
+                      type: 'warning'
+                    });
+                }
+            },
+            closeSoCus(){
+                this.inputSearchCustomer="";
+                this.soCusFg=false;
+                this.searchCustomer=false;
+            },
+//            跳转到客户管理
+            toCusM(){
+                let url=`${basePath}/cus_/goCusPage`
+                let newTabs={
+                    name:"客户管理",
+                    url
+                }
+                let tabsFlag=false;
+                for(let index in app.$data.editableTabs){
+                    if(app.$data.editableTabs[index].name=="客户管理"){
+                        app.$data.editableTabs.splice(index,1)
+                    }
+                }
+                app.$data.editableTabs.push(newTabs);
+                app.$data.editableTabsValue="客户管理";
+            },
+//            查询客户翻页
+            soCusPage(val){
+                this.loading=true;
+                let soCusObj={
+                    YBC002:this.inputSearchCustomer,
+                    currentPage:val
+                }
+                let that=this;
+                $.ajax({
+                    type:"GET",
+                    url:basePath+"/cus_/getPageCusLst",
+                    data:soCusObj,
+                    success:function(data){
+                        if(data.msg="200"){
+                            console.log("搜索客户结果")
+                            console.log(data);
+
+                            that.cusTableLstInit=data.rows;
+                            that.pageInit.totalResult=data.total;
+                            that.pageInit.currentPage=val;
+                            that.loading=false;
+                        }
+                    }
+                })
+            },
+            toCusInfo(index,row){
+                let url=`${basePath}/cus_/goUpdateCusBasicPage?YBC001=${row.YBC001}`
+                let newTabs={
+                    name:"客户详情",
+                    url
+                }
+                for(let index in app.$data.editableTabs){
+                    if(app.$data.editableTabs[index].name=="客户详情"){
+                        app.$data.editableTabs.splice(index,1)
+                    }
+                }
+                app.$data.editableTabs.push(newTabs);
+                setTimeout(function(){
+                    app.$data.editableTabsValue="客户详情";
+                },500);
+            },
+
+//            表格间隔行变色
+            tableRowClassName({row,rowIndex}){
+                if(rowIndex==1){
+
+                }else if (rowIndex%2 == 0) {
+                    return 'odd-row';
+                }
+                return 'even-row';
+            },
+
+//            查询榜单
+            check(){
+                if(this.cycleTime){
+                    if(this.cycleTime.length !=0){
+                        this.checkPd.startTm=this.cycleTime[0]+' 00:00:00';
+                        this.checkPd.endTm=this.cycleTime[1]+' 23:59:59';
+                    }
+                }else{
+                    delete this.checkPd.startTm;
+                    delete this.checkPd.endTm;
+                }
+                this.checkPd.DEPT_LAYERORDER_Sea=(this.selectedOptions[this.selectedOptions.length-1]).DEPT_LAYERORDER;
+
+                this.getRankForSign();
+            },
+//            获取后台做单情况
+            getsignList(){
+                let that=this;
+                $.ajax({
+                    type:"GET",
+                    url:basePath+"/pubSys/getIndexBackNum",
+                    data:"",
+                    success:function(data){
+                        if(data.msg="200"){
+                            that.signList=data.result;
+                        }
+                    }
+                })
+            },
+//            获取完成率
+            getCtForMonths(){
+                let that=this;
+                $.ajax({
+                    type:"GET",
+                    url:basePath+"/hmp_cusDb/getCtForMonth",
+                    data:"",
+                    success:function(data){
+                        if(data.msg="200"){
+                            console.log("_________获取任务__________");
+                            console.log(data);
+                            that.getCtForMonth=data.result;
+                        }
+                    }
+                })
+            },
+//            获取客户池数据
+            getCusNums(){
+                let that=this;
+                $.ajax({
+                    type:"GET",
+                    url:basePath+"/hmp_cusDb/getCusDb",
+                    data:"",
+                    success:function(data){
+                        if(data.msg="200"){
+                            that.userNewNum=data.result.newCusLimitTdNum;
+                            that.userNewTreated=data.result.wtFlwNum;
+                            that.userNumTotal=data.result.poolSize;
+                        }
+                    }
+                })
+            },
+//            获取当前部门（角色）范围
+            getOptions(){
+                let that=this;
+                $.ajax({
+                    type:"GET",
+                    url:basePath+"/user/searchDeptAndMeLst",
+                    data:"",
+                    success:function(data){
+                        if(data.msg="200"){
+                            that.options=data.result;
+                        }
+                    }
+                })
+            },
+//            新增客户提交事件
+            submitForm(){
+                let YBC003=this.ruleForm.YBC003;
+                let that = this;
+                $.ajax({
+                    type:"GET",
+                    url:basePath+"/pho_rec/getNameByTel",
+                    data:{YBC003:YBC003},
+                    success:function(data){
+                        if(data.msg="200"){
+                            if(data.result.YBC001){
+                                that.newCusPhoneFg=false;
+                                that.$confirm(`此号码已存在, 客户所属${data.result.deptName} ${data.result.YBC029}`, '提示', {
+                                  confirmButtonText: '确定',
+                                  cancelButtonText: '取消',
+                                  type: 'warning'
+                                }).then(() => {
+
+                                }).catch(() => {
+
+                                });
+                            }else{
+                                if(validateIDcard(that.ruleForm.YBC010)){
+                                    let phoneReg=/^[1][0-9]{10}$/;
+                                    if(phoneReg.test(that.ruleForm.YBC003) && that.ruleForm.SOURCE){
+                                        let newUser=that.ruleForm;
+                                        if(newUser.YBC004_TP=="男"){
+                                            newUser.YBC004_TP=1
+                                        }else if(newUser.YBC004_TP=="女"){
+                                            newUser.YBC004_TP=2
+                                        }
+                                        if(newUser.YBC018_TP=="A"){
+                                            newUser.YBC018_TP=1
+                                        }else if(newUser.YBC018_TP=="B"){
+                                            newUser.YBC018_TP=2
+                                        }else if(newUser.YBC018_TP=="C"){
+                                            newUser.YBC018_TP=3
+                                        }else if(newUser.YBC018_TP=="D"){
+                                            newUser.YBC018_TP=4
+                                        }
+                                        if(newUser.YBC009_TP=="已婚"){
+                                            newUser.YBC009_TP=2
+                                        }else if(newUser.YBC009_TP=="未婚"){
+                                            newUser.YBC009_TP=1
+                                        }
+
+                                        $.ajax({
+                                            type:"GET",
+                                            url:basePath+"/cus_/addCus",
+                                            data:newUser,
+                                            success:function(data){
+                                                if(data.msg=="200"){
+                                                    let row={};
+                                                    row.YBC001=data.result;
+                                                    that.$confirm('是否进入客户详情页继续添加客户信息?', '提示', {
+                                                        confirmButtonText: '确定',
+                                                        cancelButtonText: '取消',
+                                                        type: 'warning'
+                                                    }).then(() => {
+                                                        that.handleCurrentChange(1);
+                                                        that.handleUserInfo("",row);
+                                                        that.addNewCustomer=false;
+                                                        that.ruleForm={YBC004_TP:"男",YBC018_TP:"A",YBC009_TP:"未婚"}
+                                                    }).catch(() => {
+                                                        that.handleCurrentChange(1);
+                                                        that.addNewCustomer=false;
+                                                        that.ruleForm={YBC004_TP:"男",YBC018_TP:"A",YBC009_TP:"未婚"}
+                                                    });
+                                                }else{
+                                                    that.$message({
+                                                        showClose: true,
+                                                        message: '添加客户失败，请重新添加',
+                                                        type: 'warning'
+                                                    });
+                                                }
+                                            }
+                                        })
+                                    }else{
+                                        that.$message({
+                                          showClose: true,
+                                          message: '请将客户信息填写完整(电话号码和客户来源为必填)',
+                                          type: 'warning'
+                                        });
+                                    }
+                                }else{
+                                    that.$message({
+                                      showClose: true,
+                                      message: '请将客户身份证号码填写准确！',
+                                      type: 'warning'
+                                    });
+                                }
+                            }
+                        }
+                    }
+                })
+            },
+//            如有客户管理标签页的处理
+            userMana(){
+                this.addNewCustomer=false;
+                let userTabs={
+                    name:"客户管理",
+                    url:"cus_/goCusPage"
+                }
+                for(let index in app.$data.editableTabs){
+                    if(app.$data.editableTabs[index].name=="客户管理"){
+                        app.$data.editableTabs.splice(index,1)
+                    }
+                }
+            },
+//            统计范围
+            handleChange(value) {
+                console.log(value);
+            },
+//            事项处理
+            toCompeleted(mid){
+                let that=this;
+                this.$confirm('此操作将处理事项, 是否继续?', '提示', {
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                  type: 'warning'
+                }).then(() => {
+                    $.ajax({
+                        type:"GET",
+                        url:`${basePath}/notice_/updateNeedForone`,
+                        data:{YBC_NEE001:mid},
+                        success:function(data){
+                            if(data.msg=="200"){
+                                that.doMatters();
+                                that.doMattereds();
+                            }
+                        }
+                    })
+                }).catch(() => {
+                  that.$message({
+                    type: 'info',
+                    message: '已取消处理'
+                  });
+                });
+            },
+//            事项删除
+            toDel(mid){
+                let that=this;
+                this.$confirm('此操作将删除事项, 是否继续?', '提示', {
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                  type: 'warning'
+                }).then(() => {
+                    $.ajax({
+                        type:"GET",
+                        url:`${basePath}/notice_/delNeedForone`,
+                        data:{YBC_NEE001:mid},
+                        success:function(data){
+                            if(data.msg=="200"){
+                                that.doMatters();
+                                that.doMattereds();
+                            }
+                        }
+                    })
+                }).catch(() => {
+                  that.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                  });
+                });
+            },
+//            添加事项
+            sureAddMatter(){
+                let that=this;
+                if(this.addMtt.text.length>0){
+                    console.log(this.addMtt)
+                    let addNewMtt={};
+                    addNewMtt.YBC_NEE003=this.addMtt.text;
+//                    判断是否提醒
+                    if(this.addMtt.remind){
+                        addNewMtt.YBC_NEE010_TP=1
+                    }else{
+                        addNewMtt.YBC_NEE010_TP=2
+                    }
+                    if(this.addMtt.remind){
+
+    //                    判断选择时间类型
+                        let date;
+                        if(this.addMtt.timeType=="3"){
+                            date=this.addMtt.time;
+                        }else if(this.addMtt.timeType=="1"){
+                            let now = new Date();
+                            let time = now.getTime() + 1000*60*30;
+                            date=new Date(time)
+                        }else if(this.addMtt.timeType=="2"){
+                            let now = new Date();
+                            let time = now.getTime() + 1000*60*60;
+                            date=new Date(time)
+                        }
+                        let year=date.getFullYear();
+                        let month=date.getMonth()+1;
+                        let day=date.getDate();
+                        let hours=date.getHours();
+                        let min=date.getMinutes();
+                        let s=date.getSeconds();
+                        addNewMtt.YBC_NEE011_TM=`${year}-${month}-${day} ${hours}:${min}:${s}`;
+                    }else{
+                        addNewMtt.YBC_NEE011_TM=""
+                    }
+
+                    $.ajax({
+                        type:"GET",
+                        url:`${basePath}/notice_/addNeedForone`,
+                        data:addNewMtt,
+                        success:function(data){
+                            if(data.msg=="200"){
+                                that.$message({
+                                  message: '添加提醒事项成功！',
+                                  type: 'success'
+                                });
+                                that.doMatters();
+                                that.addMatter=false;
+                                that.addMtt={text:'',remind:false,timeType:1,time:''}
+                            }
+                        }
+                    })
+                }else{
+                    that.$message({
+                      message: '请输入提醒事项内容！',
+                      type: 'warning'
+                    });
+                }
+
+            },
+//            获取登陆者的待办事项
+            doMatters(){
+                let that=this;
+                $.ajax({
+                    type:"GET",
+                    url:`${basePath}/notice_/getNoticeLst`,
+                    data:'',
+                    success:function(data){
+                        if(data.msg=="200"){
+                            that.toBeDealt=data.result;
+                        }
+                    }
+                })
+            },
+//            获取登陆者的已处理事项
+            doMattereds(){
+                let that=this;
+                $.ajax({
+                    type:"GET",
+                    url:`${basePath}/notice_/getNoticeHandleLst`,
+                    data:'',
+                    success:function(data){
+                        if(data.msg=="200"){
+                            that.completed=data.result;
+                        }
+                    }
+                })
+            },
+//            修改待办事项是否提醒
+            getMatters(){
+                let that=this;
+                $.ajax({
+                    type:"GET",
+                    url:`${basePath}/notice_/updateNeedForone`,
+                    data:'',
+                    success:function(data){
+                        console.log(data)
+                    }
+                })
+            },
+//            去外呼工作台
+            toCallWb(){
+//                如有本地session，先将其清除
+
+                if(sessionStorage.calloutPhone){
+                    sessionStorage.clear();
+                }
+                if(this.seatSate){
+                    let url=`${basePath}/pho_calOut/goWorkBench?YBC008_TP=0`
+                    let newTabs={
+                        name:"呼叫工作台",
+                        url
+                    }
+                    let tabsFlag=false;
+                    for(let item of app.$data.editableTabs){
+                        if(url==item.url){
+                            tabsFlag=true
+                        }
+                    }
+                    if(tabsFlag){
+                        let ifms=window.parent.document.getElementById(url);
+                        ifms.src=url;
+                        setTimeout(function(){
+                            app.$data.editableTabsValue="呼叫工作台";
+                        },1500);
+                    }else{
+                        app.$data.editableTabs.push(newTabs);
+                        app.$data.editableTabsValue="呼叫工作台";
+                    }
+                }else{
+                    this.$message({
+                      message: '坐席登录失败，无法进入呼叫工作台！请点击尝试链接~',
+                      type: 'warning'
+                    });
+                }
+
+
+            },
+//            获取呼叫信息
+            getCallInfo(){
+                let that=this;
+                $.ajax({
+                    type:"GET",
+                    url:`${basePath}/pho_dtaCont/getContDB`,
+                    data:'',
+                    success:function(data){
+                        console.log("获取的呼叫信息");
+                        console.log(data);
+                        that.callNumTotal=data.result.callOutCount;
+                        that.callTimeTotal=that.secondToDate(data.result.totalDialBridgeDuration)
+                        that.callDone=data.result.conRate;
+                    }
+                })
+            },
+//            获取业绩榜
+//            getRankForAchi(){
+//                let that=this;
+//                $.ajax({
+//                    type:"GET",
+//                    url:`${basePath}/hmp_rank/getRankForAchi`,
+//                    data:that.checkPd,
+//                    success:function(data){
+//                        that.yjName=[];
+//                        that.yjNum=[];
+//                        if(data.msg=="200"){
+//                            for(let item of data.result){
+//                                that.yjName.push(item.name);
+//                                that.yjNum.push(item.incSum);
+//                            }
+//                            that.markEcharts();
+//                        }
+//                    }
+//                })
+//            },
+//            获取签单排行榜
+            getRankForSign(){
+                let that=this;
+                $.ajax({
+                    type:"GET",
+                    url:`${basePath}/hmp_rank/getRankForSign`,
+                    data:that.checkPd,
+                    success:function(data){
+                        that.qdName=[];
+                        that.qdNum=[];
+                        if(data.msg=="200"){
+                            for(let item of data.result){
+                                that.qdName.push(item.name);
+                                that.qdNum.push(item.finishNum);
+                            }
+                            that.markEcharts0();
+                        }
+                    }
+                })
+            },
+//            秒转换为时分秒//秒转化成 时分秒
+            secondToDate(result) {
+                var h = Math.floor(result / 3600);
+                var m = Math.floor((result / 60 % 60));
+                var s = Math.floor((result % 60));
+                if(h>0){
+                    return result = h + "h" + m + "min" + s + "s";
+                }
+                return result = m + "min" + s + "s";
+            },
+
+//            查看客户详情
+            handleUserInfo(index,row){
+                let url=`${basePath}/cus_/goUpdateCusBasicPage?YBC001=${row.YBC001}`
+                let newTabs={
+                    name:"客户详情",
+                    url
+                }
+                let tabsFlag=false;
+                for(let index in app.$data.editableTabs){
+                    if(app.$data.editableTabs[index].name=="客户详情"){
+                        app.$data.editableTabs.splice(index,1)
+                    }
+                }
+                app.$data.editableTabs.push(newTabs);
+                app.$data.editableTabsValue="客户详情";
+            },
+
+//            圆柱图
+            markEcharts(){
+//**************只显示前十的数据柱形图************************************
+                // 基于准备好的dom，初始化echarts实例
+                let myChart = echarts.init(document.getElementById('main'),"essos");
+                let dataAxis = this.yjName;
+                let data = this.yjNum;
+
+                option = {
+                    color: ['#4aa5fb'],
+                    tooltip : {
+                        trigger: 'axis',
+                        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : dataAxis,
+                            axisTick: {
+                                alignWithLabel: true
+                            },
+                            axisLabel: {
+                                show: true,
+                                textStyle: {
+                                    color: '#4aa5fb'
+                                }
+                            }
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value',
+                            axisLabel : {
+                                formatter: '{value}',
+                                textStyle: {
+                                    color: '#53DD9D'
+                                }
+                            }
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'业绩',
+                            type:'bar',
+                            barWidth: '50%',
+                            data:data
+                        }
+                    ]
+                };
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+            },
+
+//            圆柱图
+            markEcharts0(){
+//**************只显示前十的数据柱形图************************************
+                // 基于准备好的dom，初始化echarts实例
+                let myChart0 = echarts.init(document.getElementById('main0'),"essos");
+
+                let dataAxis0 = this.qdName;
+                let data0 = this.qdNum;
+
+
+                option0 = {
+                    color: ['#4aa5fb'],
+                    tooltip : {
+                        trigger: 'axis',
+                        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : dataAxis0,
+                            axisTick: {
+                                alignWithLabel: true
+                            }
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'签单',
+                            type:'bar',
+                            barWidth: '50%',
+                            data:data0
+                        }
+                    ]
+                };
+                // 使用刚指定的配置项和数据显示图表。
+                myChart0.setOption(option0);
+            }
+        }
+    })
+
+</script>
+</html>

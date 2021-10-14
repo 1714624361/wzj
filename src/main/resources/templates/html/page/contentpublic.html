@@ -1,0 +1,86 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org">
+<head >
+	<link rel="shortcut icon" href="favicon.ico"> <link href="../static/css/bootstrap.min.css?v=3.3.6" rel="stylesheet"/>
+    <link href="../static/css/font-awesome.css?v=4.4.0" rel="stylesheet"/>
+    <link href="../static/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet"/>
+    <link href="../static/css/animate.css" rel="stylesheet"/>
+    <link href="../static/css/style.css?v=4.1.0" rel="stylesheet"/>
+    <link href="../static/css/plugins/treeview/bootstrap-treeview.css" rel="stylesheet"/>
+    <link href="../static/css/plugins/sweetalert/sweetalert.css" rel="stylesheet"/>
+    <link href="../static/css/apply.css" rel="stylesheet"/>
+    
+	<!-- 全局js -->
+    <script src="../static/js/jquery.min.js?v=2.1.4"></script>
+    <script src="../static/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="../static/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="../static/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="../static/js/plugins/layer/layer.min.js"></script>
+    
+
+    <!-- 第三方插件 -->
+    <script src="../static/js/plugins/pace/pace.min.js"></script>
+    <script src="../static/js/Three_Linkage.js"></script>
+    
+
+    <!-- 自定义js -->
+    <script src="../static/js/content.js?v=1.0.0"></script>
+	<script src="../static/js/tip.js"></script>
+
+    <!-- Bootstrap table -->
+    <script src="../static/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="../static/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+    <script src="../static/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <!-- jQuery Validation plugin javascript-->
+    <script src="../static/js/plugins/validate/jquery.validate.min.js"></script>
+    <script src="../static/js/plugins/validate/messages_zh.min.js"></script>
+    <script src="../static/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <!-- Bootstrap-Treeview plugin javascript -->
+    <!-- <script src="../static/js/plugins/treeview/bootstrap-treeview.js"></script>
+    <script src="../static/js/demo/treeview-demo.js"></script> -->
+    <!-- bootstrap treeview -->
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="../static/bootstrap/css/bootstrap-treeview.css"/>
+	<link rel="stylesheet" type="text/css" href="../static/css/swiper.min.css"/>
+	<script src="../static/bootstrap/js/jquery-2.2.3.min.js" type="text/javascript"></script>
+	<script src="../static/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+	<script src="../static/bootstrap/js/bootstrap-treeview.js" type="text/javascript"></script>
+	<!-- Sweet alert -->
+    <script src="../static/js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="../static/js/swiper.min.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script type="text/javascript">
+    
+//     	alert($("#eeee").css("color"));
+    //获取当前请求路径
+    		function getContextPath(){
+                var localObj = window.location;
+                var contextPath = localObj.pathname.split("/")[1];
+                return contextPath ;
+            }
+            
+		function change(curr){
+			
+			/* alert($(curr).children("span").css("color"));
+			alert($("#qqq").css("color")); */
+			if($(curr).children("span").css("color") ==  'rgb(201, 198, 198)'){
+				/* alert(111);
+				$("#eeee").html("444"); */
+				$(curr).children("span").css("color",'rgb(255, 0, 0)');
+			}else if($(curr).children("span").css("color") == "#C9C6C6"){
+				/* alert(222); */
+				$(curr).children("span").css("color","#C9C6C6");
+			}
+			
+		}
+	
+    </script>
+</head>
+<body>
+	<!-- <div th:include="html/wechat/public/apply_field :: apply_fie"></div>
+	<div th:include="html/wechat/public/apply_suc :: apply_suc"></div> -->
+	<div th:include="html/wechat/public/tip :: tip"></div>
+	<!-- <div th:include="html/wechat/public/but_tip :: tip"></div> -->
+</body>
+</html>

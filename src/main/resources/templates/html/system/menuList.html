@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title> - Bootstrap Table</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <style>
+        body{
+            height: 1500px !important;
+            overflow: scroll;
+        }
+    </style>
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        
+
+        <!-- Panel Other -->
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>菜单管理</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-wrench"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#">选项1</a>
+                        </li>
+                        <li><a href="#">选项2</a>
+                        </li>
+                    </ul>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+	                 <div class="col-sm-5">
+				<div class="btn-group" role="group" >
+				  <button type="button" class="btn btn-default" onclick="dosome(1)">全选</button>
+				  <button type="button" class="btn btn-default" onclick="dosome(2)">反选</button>
+				  <button type="button" class="btn btn-default" onclick="dosome(4)">展开</button>
+				  <button type="button" class="btn btn-default" onclick="dosome(3)">折叠</button>
+				</div>
+				<div style="display: none;">
+				<input  type="button" onclick="getDisabled()" value="选中项的个数"/></br></br>
+				<label>选中父级，子级默认选中</label></br></br>
+				<input  type="button" onclick="testSelect()" value="选中节点"/></br></br>
+				<input  type="button" onclick="testDW()" value="定位节点"/></br></br>
+				</div>
+				<div id="treeview1"></div>
+				<button class="btn btn-primary " onclick="delTree()" type="button"><i class="fa fa-plus"></i>&nbsp;删除</button>
+			</div>
+			<div class="col-sm-7">
+				<div class="ibox ">
+                    <div class="ibox-content">
+                        <div class="tab-content">
+                        	<form class="form-horizontal m-t" method ='post' id="menuForm" action="saveMenu">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">菜单名称：</label>
+                                <div class="col-sm-8">
+                                    <input id="MENU_NAME" name="MENU_NAME"  type="text" class="form-control" required="" aria-required="true">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">菜单地址：</label>
+                                <div class="col-sm-8">
+                                    <input id="MENU_URL" type="text" class="form-control" name="MENU_URL" required="" aria-required="true">
+                                </div>
+                            </div>
+                            <div style="display: none;">
+                            	<input id="MENU_ID" name="MENU_ID" type=text/>
+                            	<input id="PARENT_ID" name="PARENT_ID" type="text"/>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-3">
+                                    <button class="btn btn-primary" onclick="editMenu()" type="button">修改</button>
+                                    <button class="btn btn-primary" onclick="addMenu()" type="button">新增为同目录菜单</button>
+                                    <button class="btn btn-primary" onclick="addSubMenu()" type="button">新增为子目录菜单</button>
+                                </div>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+			</div>
+                </div>
+            </div>
+        </div>
+        <div th:include="html/page/contentpublic :: html"></div>
+        <!-- End Panel Other -->
+    </div>
+
+    
+	<script type="text/javascript">
+		//添加如下代码
+	    function actionFormatter(value, row, index) {
+        	return '<a class="mod" >修改</a> ' + '<a class="delete">删除</a>';
+    	}
+	  //表格  - 操作 - 事件
+	    window.actionEvents = {
+	        'click .mod': function(e, value, row, index) {      
+	              //修改操作
+	             editOpen();
+	            },
+	        'click .delete' : function(e, value, row, index) {
+	              //删除操作 
+	        	editOpen();
+	            }
+	        }
+	   /*  function queryParams(params) { 
+            return {
+                pageSize: params.limit, 
+                offset: params.offset, 
+                roleName: $('#seachVal').val(),
+                name: params.sort,
+                order: params.order
+            };
+        } */
+	  //查询方法
+	    $(function () {
+            //$('#datalist').bootstrapTable('refresh', { url: '/Home/GetPaginationData2' });
+            $('#search').click(function () {
+                var seachVal = $('#seachVal').val();
+                $('#datalist').bootstrapTable('refresh', { url: 'menuIndex3?seachVal=' + seachVal });
+            });
+        });
+      //iframe窗
+      function editOpen(){
+    	  parent.layer.open({
+              type: 2,
+              title: '标题',
+              //closeBtn: 0, //不显示关闭按钮
+              shade: [0.8],//透明度背景
+              area: ['50%', '50%'],
+              //offset: 'rb', //右下角弹出
+              //time: 2000, //2秒后自动关闭
+              anim: 2,
+              content: ['menu/menuOpen'] //iframe的url，no代表不显示滚动条
+              
+            });
+      }
+      //选中数据传入右侧
+      function getTree(data){
+      	$('#MENU_ID').val(data.allid);//ID
+      	$('#MENU_NAME').val(data.text);//菜单名称
+      	$('#MENU_URL').val(data.href);//菜单地址
+      	$('#PARENT_ID').val(data.pid);//菜单父ID
+      }
+      //删除
+      function delTree(data){
+      var basePath = "/"+getContextPath();
+      var url = basePath+"/menu/delMenu";
+      //获取选中值
+      	var checkedArr = $('#treeview1').treeview('getChecked','');
+			var a = "";
+			$.each(checkedArr,function(index,value)
+			{
+				a += value.allid +",";		
+			});
+		$.ajax({
+					type: "get",
+			        url: url,
+			        async: false,
+			        data: {"MENU_ID":a},
+			        success: function (data)
+			        {
+			        	getTreeJSON();
+			        }
+		});
+      }
+       //新增菜单
+      function addMenu(){
+      		
+      		//把主ID制空就表示新增
+      		$('#MENU_ID').val(null);//ID
+      		savesubmit();
+      }
+      //编辑菜单
+      function editMenu(){
+      		
+			//选中行数据
+			var checkedArr1 = $('#treeview1').treeview('getSelected', '');
+			var b = "";
+			$.each(checkedArr1,function(index,value)
+			{
+				b += value.allid +",";		
+			});
+			if(b==null || b==''){
+				alert("请选中要操作的菜单!");
+				return;
+			}else{
+				$("#menuForm").submit();
+			}
+      }
+      //新增子菜单菜单
+      function addSubMenu(){
+      		
+      		//先植入在值空
+      		//把父ID设置成新数据的主ID
+      		$('#PARENT_ID').val($('#MENU_ID').val());
+      		//把主ID制空就表示新增
+      		$('#MENU_ID').val(null);//ID
+      		savesubmit();
+      }
+      //新增子菜单菜单
+      function savesubmit(){
+      		//勾选数据
+      		var checkedArr = $('#treeview1').treeview('getChecked','');
+			var a = "";
+			$.each(checkedArr,function(index,value)
+			{
+				a += value.allid +",";		
+			});
+			//选中行数据
+			var checkedArr1 = $('#treeview1').treeview('getSelected', '');
+			var b = "";
+			$.each(checkedArr1,function(index,value)
+			{
+				b += value.allid +",";		
+			});
+			if(a==null || a==''){
+				alert("请勾选要操作的菜单!");
+				return;
+			}else if(b==null || b==''){
+				alert("请选中要操作的菜单!");
+				return;
+			}else{
+				$("#menuForm").submit();
+			}
+			
+      }
+	</script>
+    <script type="text/javascript">
+		function getTreeJSON(){
+			var basePath = "/"+getContextPath();
+	        //var user = $("#user").val(); 
+	        //var password = $("#pwd").val();    
+        	$.ajax({
+			        type: "get",
+			        url: basePath+"/menu/getTree",
+			        async: false,
+			        //data: {"account":user,"password":password},
+			        success: function (data)
+			        {
+			        	var treedata = data;
+			        	$('#treeview1').treeview({
+				          data: treedata,
+				          showCheckbox : true,
+				          levels:1,
+				          onNodeChecked: function(event, data){
+				        	 //选中父节点，则自动选择子节点
+				        	if(data.nodes != null)
+				        	{
+				        		var arrayInfo = data.nodes;
+				        		for (var i = 0; i < arrayInfo.length; i++) {
+				        			// $('#treeview1').treeview('checkNode', [ arrayInfo[i].nodeId, { silent: true } ]);
+				        			$('#treeview1').treeview('toggleNodeChecked', [ arrayInfo[i].nodeId, { silent: true } ]);
+								}
+				        	}
+						  },
+						  onNodeUnchecked: function(event, data){
+					        	 //取消选中父节点，则自动取消选择子节点
+					        	if(data.nodes != null)
+					        	{
+					        		var arrayInfo = data.nodes;
+					        		for (var i = 0; i < arrayInfo.length; i++) {
+					        			// $('#treeview1').treeview('checkNode', [ arrayInfo[i].nodeId, { silent: true } ]);
+					        			$('#treeview1').treeview('toggleNodeChecked', [ arrayInfo[i].nodeId, { silent: true } ]);
+									}
+					        	}
+							  },
+							onNodeSelected: function(event, data) {
+								getTree(data);
+							}
+				    		});
+			        },
+			         error: function(XMLHttpRequest, textStatus, errorThrown) {
+		             alert(XMLHttpRequest.status);
+		             alert(XMLHttpRequest.readyState);
+		             alert(textStatus);
+		               }
+			     });
+		    }
+    		getTreeJSON();
+		
+		function dosome( num){
+			if(num == 1)
+			{
+				$('#treeview1').treeview('checkAll', { silent: true });//全选
+			}else if(num == 2){
+				$('#treeview1').treeview('uncheckAll', { silent: true });//取消全选
+			}else if(num == 3){
+				$('#treeview1').treeview('collapseAll', { silent: true });//折叠
+			}else if(num == 4){
+				$('#treeview1').treeview('expandAll', { levels: 2, silent: true });//展开所有二级节点
+			}
+		}
+		function getDisabled(){
+			var checkedArr = $('#treeview1').treeview('getChecked','');
+			var a = "";
+			$.each(checkedArr,function(index,value)
+			{
+				a += value.allid + "-"+value.text+",";								
+			});
+			
+			alert(a);
+		}
+		
+		function testSelect()
+		{
+			var checkedArr = $('#treeview1').treeview('getSelected', '');
+			alert(checkedArr[0].allid+"-"+checkedArr[0].text);
+		}
+		
+		function testDW()
+		{
+		//	$('#treeview1').treeview('expandAll', { levels: 2, silent: true });//展开所有二级节点
+			
+			$('#treeview1').treeview('expandNode', [ 9, { levels: 1, silent: true } ]);
+			
+		}
+	</script>
+    
+
+</body>
+
+</html>

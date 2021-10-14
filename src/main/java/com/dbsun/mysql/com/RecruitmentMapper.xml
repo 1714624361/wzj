@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dbsun.mapper.com.RecruitmentMapper">
+	<!--招聘-->
+
+	<sql id="Base_Column_List" >
+        rec.id, 
+        rec.position, 
+        rec.pos_desc, 
+        rec.create_time
+    </sql>
+
+	<sql id="Base_Column_List_1" >
+        rec.id rec_id, 
+        rec.position rec_position, 
+        rec.pos_desc rec_pos_desc, 
+        rec.create_time rec_create_time
+    </sql>
+
+    <select id="getRecruitmentByColumn" parameterType="pd" resultType="pd"  >
+        select 
+            <include refid="Base_Column_List" />
+        from recruitment rec
+        where 1 = 1
+        <if test="id != null" >
+            and rec.id = #{id} 
+        </if>
+        <if test="position != null" >
+            and rec.position = #{position} 
+        </if>
+        <if test="pos_desc != null" >
+            and rec.pos_desc = #{pos_desc} 
+        </if>
+        <if test="create_time != null" >
+            and rec.create_time = #{create_time} 
+        </if>
+    </select>
+
+    <delete id="deleteRecruitmentByColumn" parameterType="pd" >
+        delete from recruitment
+        where 1 = 1
+        <if test="id != null and id != ''" >
+            and id = #{id} 
+        </if>
+        <if test="position != null and position != ''" >
+            and position = #{position} 
+        </if>
+        <if test="pos_desc != null and pos_desc != ''" >
+            and pos_desc = #{pos_desc} 
+        </if>
+        <if test="create_time != null and create_time != ''" >
+            and create_time = #{create_time} 
+        </if>
+    </delete>
+
+    <insert id="addRecruitment" parameterType="pd" >
+        insert into recruitment (
+            position, 
+            pos_desc, 
+            create_time
+        )
+        values (
+            #{position}, 
+            #{pos_desc}, 
+            now()
+        )
+    </insert>
+
+    <insert id="addRecruitmentSelective" parameterType="pd" >
+        insert into recruitment
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null and id != ''" >
+                id, 
+            </if>
+            <if test="position != null and position != ''" >
+                position, 
+            </if>
+            <if test="pos_desc != null and pos_desc != ''" >
+                pos_desc, 
+            </if>
+            <if test="create_time != null and create_time != ''" >
+                create_time, 
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test=" id != null and id != ''" >
+                #{id}, 
+            </if>
+            <if test=" position != null and position != ''" >
+                #{position}, 
+            </if>
+            <if test=" pos_desc != null and pos_desc != ''" >
+                #{pos_desc}, 
+            </if>
+            <if test=" create_time != null and create_time != ''" >
+                #{create_time}, 
+            </if>
+        </trim>
+    </insert>
+
+	<!--循环批量插入-->
+	<insert id="addRecruitmentBatch" parameterType="pd" >
+		insert into recruitment (
+			id, 
+			position, 
+			pos_desc, 
+			create_time
+		)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(
+				(select REPLACE(uuid(), '-', '')),
+				#{item.position}, 
+				#{item.pos_desc}, 
+				#{item.create_time}
+			)
+		</foreach>
+	</insert>
+
+    <update id="updateRecruitmentByid" parameterType="pd" >
+        update recruitment
+        <set>
+            <if test="position != null and position != '' " >
+               position = #{position}, 
+            </if>
+            <if test="pos_desc != null and pos_desc != '' " >
+               pos_desc = #{pos_desc}, 
+            </if>
+            <if test="create_time != null and create_time != '' " >
+               create_time = #{create_time}, 
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateRecruitmentByColumn" parameterType="pd" >
+        update recruitment
+        <set>
+            <if test="position != null and position != '' " >
+               position = #{position}, 
+            </if>
+            <if test="pos_desc != null and pos_desc != '' " >
+               pos_desc = #{pos_desc}, 
+            </if>
+            <if test="create_time != null and create_time != '' " >
+               create_time = #{create_time}, 
+            </if>
+        </set>
+       where 1 = 1 
+       <if test="id_Q != null and id_Q != '' " >
+            and id = #{id_Q} 
+       </if>
+       <if test="position_Q != null and position_Q != '' " >
+            and position = #{position_Q} 
+       </if>
+       <if test="pos_desc_Q != null and pos_desc_Q != '' " >
+            and pos_desc = #{pos_desc_Q} 
+       </if>
+       <if test="create_time_Q != null and create_time_Q != '' " >
+            and create_time = #{create_time_Q} 
+       </if>
+    </update>
+
+    <select id="getPageRecruitmentList" parameterType="page" resultType="pd" useCache="false">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM recruitment rec
+        where 1 = 1
+        <if test="pd.id != null and pd.id != ''" >
+            and rec.id = #{pd.id} 
+        </if>
+        <if test="pd.position != null and pd.position != ''" >
+            and rec.position = #{pd.position} 
+        </if>
+        <if test="pd.pos_desc != null and pd.pos_desc != ''" >
+            and rec.pos_desc = #{pd.pos_desc} 
+        </if>
+        <if test="pd.create_time != null and pd.create_time != ''" >
+            and rec.create_time = #{pd.create_time} 
+        </if>
+    </select>
+
+    <select id="getRecruitmentList" parameterType="pd" resultType="pd" useCache="false">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM recruitment rec
+        where 1 = 1
+        <if test="id != null and id != ''" >
+            and rec.id = #{id} 
+        </if>
+        <if test="position != null and position != ''" >
+            and rec.position = #{position} 
+        </if>
+        <if test="pos_desc != null and pos_desc != ''" >
+            and rec.pos_desc = #{pos_desc} 
+        </if>
+        <if test="create_time != null and create_time != ''" >
+            and rec.create_time = #{create_time} 
+        </if>
+    </select>
+
+    <!--<update id="updateRecruitmentBatch" parameterType="pd" >
+		<foreach close=";" collection="list" index="index" item="item" open="" separator=";">
+			update recruitment
+			<trim prefix="set" suffixOverrides=",">
+				<if test="item.position != null and item.position != '' " >
+					position = #{item.position}, 
+				</if>
+				<if test="item.pos_desc != null and item.pos_desc != '' " >
+					pos_desc = #{item.pos_desc}, 
+				</if>
+				<if test="item.create_time != null and item.create_time != '' " >
+					create_time = #{item.create_time}, 
+				</if>
+			</trim>
+			where 1 = 1 
+			<if test="item.id_Q != null and item.id_Q != '' " >
+				and id = #{item.id_Q} 
+			</if>
+			<if test="item.position_Q != null and item.position_Q != '' " >
+				and position = #{item.position_Q} 
+			</if>
+			<if test="item.pos_desc_Q != null and item.pos_desc_Q != '' " >
+				and pos_desc = #{item.pos_desc_Q} 
+			</if>
+			<if test="item.create_time_Q != null and item.create_time_Q != '' " >
+				and create_time = #{item.create_time_Q} 
+			</if>
+		</foreach>
+    </update>-->
+</mapper>

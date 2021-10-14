@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title> - Bootstrap Table</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+               <!-- Panel Other -->
+        <div class="ibox float-e-margins">
+	            <div class="ibox-title">
+	                <h5>用户列表</h5>
+	                <div class="ibox-tools">
+	                    <a  onclick="newOpen()" class="btn btn-primary btn-xs">新增用户</a>
+	                </div>
+	            </div>
+	            				<table 
+									id="datalist"
+									data-toggle="table"
+									data-url="userLst"
+									data-side-pagination="server"
+									data-mobile-responsive="true"
+									data-height="500"   
+									data-pagination="true" 
+									data-icon-size="outline" 
+									>
+									<thead>
+										<tr>
+											<th data-field="state" data-checkbox="true"></th>
+											<th data-field="NAME">用户姓名</th>
+		                                    <th data-field="USERNAME">用户账号</th>
+		                                    <th data-field="DEPTNAME">用户产品</th>
+											<th data-field="ROLENAME">用户角色</th>
+											<th data-field="STATUSNAME">是否禁用</th>
+		                                    <th data-field="operation" 
+										        data-formatter="actionFormatter"
+										        data-events="actionEvents">操作</th>
+										</tr>
+									</thead>
+								</table>
+			
+                </div>
+            </div>
+        <div th:include="html/page/contentpublic :: html"></div>
+
+    
+	<script type="text/javascript">
+		//添加如下代码
+	    function actionFormatter(value, row, index) {
+        	return '<a class="mod" > 修改</a> ' + '<a class="delete">禁用账户</a>';
+    	}
+	  //表格  - 操作 - 事件
+	    window.actionEvents = {
+	        'click .mod': function(e, value, row, index) {      
+	              //修改操作
+	             editOpen(row);
+	            },
+	        'click .delete' : function(e, value, row, index) {
+	              //删除操作 
+	        	editOpen();
+	            }
+	        }
+	   /*  function queryParams(params) { 
+            return {
+                pageSize: params.limit, 
+                offset: params.offset, 
+                roleName: $('#seachVal').val(),
+                name: params.sort,
+                order: params.order
+            };
+        } */
+	  //查询方法
+	    $(function () {
+            //$('#datalist').bootstrapTable('refresh', { url: '/Home/GetPaginationData2' });
+            $('#search').click(function () {
+                var seachVal = $('#seachVal').val();
+                $('#datalist').bootstrapTable('refresh', { url: 'menuIndex3?seachVal=' + seachVal });
+            });
+        });
+      //修改用户信息
+      function editOpen(row){
+      var data = '?USER_ID='+row.USER_ID;
+    	  parent.layer.open({
+              type: 2,
+              title: '编辑用户信息',
+              //closeBtn: 0, //不显示关闭按钮
+              shade: [0.8],//透明度背景
+              area: ['40%', '85%'],
+              //offset: 'rb', //右下角弹出
+              //time: 2000, //2秒后自动关闭
+              anim: 2,
+              content: ['user/userEditOpen'+data] //iframe的url，no代表不显示滚动条
+
+            });
+      }
+      //新增用户
+      function newOpen(){
+    	  parent.layer.open({
+              type: 2,
+              title: '添加用户',
+              //closeBtn: 0, //不显示关闭按钮
+              shade: [0.8],//透明度背景
+              area: ['40%', '85%'],
+              //offset: 'rb', //右下角弹出
+              //time: 2000, //2秒后自动关闭
+              anim: 2,
+              content: ['user/userNewOpen'] //iframe的url，no代表不显示滚动条
+
+            });
+      }
+	</script>
+    
+    
+
+</body>
+
+</html>

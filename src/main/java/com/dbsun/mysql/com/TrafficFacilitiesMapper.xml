@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dbsun.mapper.com.TrafficFacilitiesMapper">
+	<!--交通设施-->
+
+	<sql id="Base_Column_List" >
+        tr.id, 
+        tr.content, 
+        tr.detection_status, 
+        tr.detection_user_id, 
+        tr.detection_user_name, 
+        tr.type, 
+        tr.create_time, 
+        tr.user_id
+    </sql>
+
+	<sql id="Base_Column_List_1" >
+        tr.id tr_id, 
+        tr.content tr_content, 
+        tr.detection_status tr_detection_status, 
+        tr.detection_user_id tr_detection_user_id, 
+        tr.detection_user_name tr_detection_user_name, 
+        tr.type tr_type, 
+        tr.create_time tr_create_time, 
+        tr.user_id tr_user_id
+    </sql>
+
+    <select id="getTrafficFacilitiesByColumn" parameterType="pd" resultType="pd"  >
+        select 
+            <include refid="Base_Column_List" />
+        from traffic_facilities tr
+        where 1 = 1
+        <if test="id != null" >
+            and tr.id = #{id} 
+        </if>
+        <if test="content != null" >
+            and tr.content = #{content} 
+        </if>
+        <if test="detection_status != null" >
+            and tr.detection_status = #{detection_status} 
+        </if>
+        <if test="detection_user_id != null" >
+            and tr.detection_user_id = #{detection_user_id} 
+        </if>
+        <if test="detection_user_name != null" >
+            and tr.detection_user_name = #{detection_user_name} 
+        </if>
+        <if test="type != null" >
+            and tr.type = #{type} 
+        </if>
+        <if test="create_time != null" >
+            and tr.create_time = #{create_time} 
+        </if>
+        <if test="user_id != null" >
+            and tr.user_id = #{user_id} 
+        </if>
+    </select>
+
+    <delete id="deleteTrafficFacilitiesByColumn" parameterType="pd" >
+        delete from traffic_facilities
+        where 1 = 1
+        <if test="id != null and id != ''" >
+            and id = #{id} 
+        </if>
+        <if test="content != null and content != ''" >
+            and content = #{content} 
+        </if>
+        <if test="detection_status != null and detection_status != ''" >
+            and detection_status = #{detection_status} 
+        </if>
+        <if test="detection_user_id != null and detection_user_id != ''" >
+            and detection_user_id = #{detection_user_id} 
+        </if>
+        <if test="detection_user_name != null and detection_user_name != ''" >
+            and detection_user_name = #{detection_user_name} 
+        </if>
+        <if test="type != null and type != ''" >
+            and type = #{type} 
+        </if>
+        <if test="create_time != null and create_time != ''" >
+            and create_time = #{create_time} 
+        </if>
+        <if test="user_id != null and user_id != ''" >
+            and user_id = #{user_id} 
+        </if>
+    </delete>
+
+    <insert id="addTrafficFacilities" parameterType="pd" >
+        insert into traffic_facilities (
+            content, 
+            detection_status, 
+            detection_user_id, 
+            detection_user_name, 
+            type, 
+            create_time, 
+            user_id
+        )
+        values (
+            #{content}, 
+            #{detection_status}, 
+            #{detection_user_id}, 
+            #{detection_user_name}, 
+            #{type}, 
+            now(), 
+            #{user_id}
+        )
+    </insert>
+
+    <insert id="addTrafficFacilitiesSelective" parameterType="pd" >
+        insert into traffic_facilities
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null and id != ''" >
+                id, 
+            </if>
+            <if test="content != null and content != ''" >
+                content, 
+            </if>
+            <if test="detection_status != null and detection_status != ''" >
+                detection_status, 
+            </if>
+            <if test="detection_user_id != null and detection_user_id != ''" >
+                detection_user_id, 
+            </if>
+            <if test="detection_user_name != null and detection_user_name != ''" >
+                detection_user_name, 
+            </if>
+            <if test="type != null and type != ''" >
+                type, 
+            </if>
+            <if test="create_time != null and create_time != ''" >
+                create_time, 
+            </if>
+            <if test="user_id != null and user_id != ''" >
+                user_id, 
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test=" id != null and id != ''" >
+                #{id}, 
+            </if>
+            <if test=" content != null and content != ''" >
+                #{content}, 
+            </if>
+            <if test=" detection_status != null and detection_status != ''" >
+                #{detection_status}, 
+            </if>
+            <if test=" detection_user_id != null and detection_user_id != ''" >
+                #{detection_user_id}, 
+            </if>
+            <if test=" detection_user_name != null and detection_user_name != ''" >
+                #{detection_user_name}, 
+            </if>
+            <if test=" type != null and type != ''" >
+                #{type}, 
+            </if>
+            <if test=" create_time != null and create_time != ''" >
+                #{create_time}, 
+            </if>
+            <if test=" user_id != null and user_id != ''" >
+                #{user_id}, 
+            </if>
+        </trim>
+    </insert>
+
+	<!--循环批量插入-->
+	<insert id="addTrafficFacilitiesBatch" parameterType="pd" >
+		insert into traffic_facilities (
+			id, 
+			content, 
+			detection_status, 
+			detection_user_id, 
+			detection_user_name, 
+			type, 
+			create_time, 
+			user_id
+		)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(
+				(select REPLACE(uuid(), '-', '')),
+				#{item.content}, 
+				#{item.detection_status}, 
+				#{item.detection_user_id}, 
+				#{item.detection_user_name}, 
+				#{item.type}, 
+				#{item.create_time}, 
+				#{item.user_id}
+			)
+		</foreach>
+	</insert>
+
+    <update id="updateTrafficFacilitiesByid" parameterType="pd" >
+        update traffic_facilities
+        <set>
+            <if test="content != null and content != '' " >
+               content = #{content}, 
+            </if>
+            <if test="detection_status != null and detection_status != '' " >
+               detection_status = #{detection_status}, 
+            </if>
+            <if test="detection_user_id != null and detection_user_id != '' " >
+               detection_user_id = #{detection_user_id}, 
+            </if>
+            <if test="detection_user_name != null and detection_user_name != '' " >
+               detection_user_name = #{detection_user_name}, 
+            </if>
+            <if test="type != null and type != '' " >
+               type = #{type}, 
+            </if>
+            <if test="create_time != null and create_time != '' " >
+               create_time = #{create_time}, 
+            </if>
+            <if test="user_id != null and user_id != '' " >
+               user_id = #{user_id}, 
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateTrafficFacilitiesByColumn" parameterType="pd" >
+        update traffic_facilities
+        <set>
+            <if test="content != null and content != '' " >
+               content = #{content}, 
+            </if>
+            <if test="detection_status != null and detection_status != '' " >
+               detection_status = #{detection_status}, 
+            </if>
+            <if test="detection_user_id != null and detection_user_id != '' " >
+               detection_user_id = #{detection_user_id}, 
+            </if>
+            <if test="detection_user_name != null and detection_user_name != '' " >
+               detection_user_name = #{detection_user_name}, 
+            </if>
+            <if test="type != null and type != '' " >
+               type = #{type}, 
+            </if>
+            <if test="create_time != null and create_time != '' " >
+               create_time = #{create_time}, 
+            </if>
+            <if test="user_id != null and user_id != '' " >
+               user_id = #{user_id}, 
+            </if>
+        </set>
+       where 1 = 1 
+       <if test="id_Q != null and id_Q != '' " >
+            and id = #{id_Q} 
+       </if>
+       <if test="content_Q != null and content_Q != '' " >
+            and content = #{content_Q} 
+       </if>
+       <if test="detection_status_Q != null and detection_status_Q != '' " >
+            and detection_status = #{detection_status_Q} 
+       </if>
+       <if test="detection_user_id_Q != null and detection_user_id_Q != '' " >
+            and detection_user_id = #{detection_user_id_Q} 
+       </if>
+       <if test="detection_user_name_Q != null and detection_user_name_Q != '' " >
+            and detection_user_name = #{detection_user_name_Q} 
+       </if>
+       <if test="type_Q != null and type_Q != '' " >
+            and type = #{type_Q} 
+       </if>
+       <if test="create_time_Q != null and create_time_Q != '' " >
+            and create_time = #{create_time_Q} 
+       </if>
+       <if test="user_id_Q != null and user_id_Q != '' " >
+            and user_id = #{user_id_Q} 
+       </if>
+    </update>
+
+    <select id="getPageTrafficFacilitiesList" parameterType="page" resultType="pd" useCache="false">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM traffic_facilities tr
+        where 1 = 1
+        <if test="pd.id != null and pd.id != ''" >
+            and tr.id = #{pd.id} 
+        </if>
+        <if test="pd.content != null and pd.content != ''" >
+            and tr.content = #{pd.content} 
+        </if>
+        <if test="pd.detection_status != null and pd.detection_status != ''" >
+            and tr.detection_status = #{pd.detection_status} 
+        </if>
+        <if test="pd.detection_user_id != null and pd.detection_user_id != ''" >
+            and tr.detection_user_id = #{pd.detection_user_id} 
+        </if>
+        <if test="pd.detection_user_name != null and pd.detection_user_name != ''" >
+            and tr.detection_user_name = #{pd.detection_user_name} 
+        </if>
+        <if test="pd.type != null and pd.type != ''" >
+            and tr.type = #{pd.type} 
+        </if>
+        <if test="pd.create_time != null and pd.create_time != ''" >
+            and tr.create_time = #{pd.create_time} 
+        </if>
+        <if test="pd.user_id != null and pd.user_id != ''" >
+            and tr.user_id = #{pd.user_id} 
+        </if>
+    </select>
+
+    <select id="getTrafficFacilitiesList" parameterType="pd" resultType="pd" useCache="false">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM traffic_facilities tr
+        where 1 = 1
+        <if test="id != null and id != ''" >
+            and tr.id = #{id} 
+        </if>
+        <if test="content != null and content != ''" >
+            and tr.content = #{content} 
+        </if>
+        <if test="detection_status != null and detection_status != ''" >
+            and tr.detection_status = #{detection_status} 
+        </if>
+        <if test="detection_user_id != null and detection_user_id != ''" >
+            and tr.detection_user_id = #{detection_user_id} 
+        </if>
+        <if test="detection_user_name != null and detection_user_name != ''" >
+            and tr.detection_user_name = #{detection_user_name} 
+        </if>
+        <if test="type != null and type != ''" >
+            and tr.type = #{type} 
+        </if>
+        <if test="create_time != null and create_time != ''" >
+            and tr.create_time = #{create_time} 
+        </if>
+        <if test="user_id != null and user_id != ''" >
+            and tr.user_id = #{user_id} 
+        </if>
+    </select>
+
+    <!--<update id="updateTrafficFacilitiesBatch" parameterType="pd" >
+		<foreach close=";" collection="list" index="index" item="item" open="" separator=";">
+			update traffic_facilities
+			<trim prefix="set" suffixOverrides=",">
+				<if test="item.content != null and item.content != '' " >
+					content = #{item.content}, 
+				</if>
+				<if test="item.detection_status != null and item.detection_status != '' " >
+					detection_status = #{item.detection_status}, 
+				</if>
+				<if test="item.detection_user_id != null and item.detection_user_id != '' " >
+					detection_user_id = #{item.detection_user_id}, 
+				</if>
+				<if test="item.detection_user_name != null and item.detection_user_name != '' " >
+					detection_user_name = #{item.detection_user_name}, 
+				</if>
+				<if test="item.type != null and item.type != '' " >
+					type = #{item.type}, 
+				</if>
+				<if test="item.create_time != null and item.create_time != '' " >
+					create_time = #{item.create_time}, 
+				</if>
+				<if test="item.user_id != null and item.user_id != '' " >
+					user_id = #{item.user_id}, 
+				</if>
+			</trim>
+			where 1 = 1 
+			<if test="item.id_Q != null and item.id_Q != '' " >
+				and id = #{item.id_Q} 
+			</if>
+			<if test="item.content_Q != null and item.content_Q != '' " >
+				and content = #{item.content_Q} 
+			</if>
+			<if test="item.detection_status_Q != null and item.detection_status_Q != '' " >
+				and detection_status = #{item.detection_status_Q} 
+			</if>
+			<if test="item.detection_user_id_Q != null and item.detection_user_id_Q != '' " >
+				and detection_user_id = #{item.detection_user_id_Q} 
+			</if>
+			<if test="item.detection_user_name_Q != null and item.detection_user_name_Q != '' " >
+				and detection_user_name = #{item.detection_user_name_Q} 
+			</if>
+			<if test="item.type_Q != null and item.type_Q != '' " >
+				and type = #{item.type_Q} 
+			</if>
+			<if test="item.create_time_Q != null and item.create_time_Q != '' " >
+				and create_time = #{item.create_time_Q} 
+			</if>
+			<if test="item.user_id_Q != null and item.user_id_Q != '' " >
+				and user_id = #{item.user_id_Q} 
+			</if>
+		</foreach>
+    </update>-->
+</mapper>

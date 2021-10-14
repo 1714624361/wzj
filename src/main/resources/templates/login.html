@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+    <title> - 登录</title>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+
+    <link rel="shortcut icon" href="favicon.ico"/>
+    <link href="static/css/bootstrap.min.css?v=3.3.6" rel="stylesheet"/>
+<!--    <link href="static/css/font-awesome.css?v=4.4.0" rel="stylesheet"/>-->
+
+<!--    <link href="static/css/animate.css" rel="stylesheet"/>-->
+    <link href="static/css/style.css?v=4.1.0" rel="stylesheet"/>
+<!--    <link href="static/css/plugins/sweetalert/sweetalert.css" rel="stylesheet"/>-->
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+
+    <link rel="stylesheet" href="static/element-ui/lib/theme-chalk/index.css">
+
+
+    <script src="static/js/vue.js"></script>
+    <script src="static/element-ui/lib/index.js"></script>
+    <style>
+        .ipt{
+            width: 300px;
+            height: 42px;
+            border-radius: 4px;
+            border: 1px solid #fff;
+            background-color: inherit;
+        }
+        :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+            color: #000 !important; opacity:1;
+        }
+
+        ::-moz-placeholder { /* Mozilla Firefox 19+ */
+            color: #000 !important;opacity:1;
+        }
+
+        input:-ms-input-placeholder{
+            color: #000 !important;opacity:1;
+        }
+
+        input::-webkit-input-placeholder{
+            color: #000 !important;opacity:1;
+        }
+    </style>
+
+</head>
+
+<body class="gray-bg" style="background-image:url(static/img/loginBGI.jpg);background-repeat:no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;">
+<!--    sessionguoqichongdingxiang-->
+    <div id="loginApp" style="height:100%;">
+        <div style="height:100%;" v-loading="fullscreenLoading" element-loading-text="拼命登录中">
+            <div class="middle-box text-center loginscreen  animated fadeInDown">
+                <div style="margin-top:150px;">
+                    <div>
+                        <img src="static/img/loginLogo.fw.png"/>
+                    </div>
+                    <form class="m-t"  action="loginPost" style="margin-top:50px;">
+                        <div class="form-group">
+                            <input type="text" id="account" class="form-control ipt" placeholder="用户名" required="" autofocus="autofocus" />
+                        </div>
+                        <div class="form-group">
+                            <input type="password" id="password" class="form-control ipt" placeholder="密码" required=""/>
+                        </div>
+                        <button type="button" @click="login" class="btn btn-primary block full-width m-b" style="background-color: #63B1F9;border: 0;height: 42px;">登 录</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+        <script>if(window.top !== window.self){ window.top.location = window.location;}</script>
+
+    <!-- 全局js -->
+    <script src="static/js/jquery.min.js?v=2.1.4"></script>
+    <script src="static/js/bootstrap.min.js?v=3.3.6"></script>
+     <!-- Sweet alert -->
+<!--    <script src="static/js/plugins/sweetalert/sweetalert.min.js"></script>-->
+	<script>
+        window.onload=function(){
+            $("#account").focus();
+            document.onkeydown=function(e){
+                // 兼容FF和IE和Opera
+                var theEvent = e || window.event;
+                var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+                if (code == 13 && loginApp.$data.flag) {
+                  //回车执行登录
+                    loginApp.login();
+                }else if(code == 13){
+                    loginApp.$data.flag=true;
+                }
+            }
+        }
+
+//        function login(){
+//        var basePath = "/"+getContextPath();
+//        var user = $("#account").val();
+//        var password = $("#password").val();
+//        	 $.ajax({
+//			        type: "get",
+//			        url: basePath+"/loginPost",
+//			        async: false,
+//			        data: {"USERNAME":user,"PASSWORD":password},
+//			        success: function (data)
+//			        {
+//			        	if(data.msg == 200){
+//			        		window.location.href=basePath+"/index";
+//			        	}else{
+//			        		swal("账号或密码错误!！", "", "info");
+//			        	}
+//
+//			        },
+//			        error:function(){
+//			        	swal("登录出错！", "", "info");
+//			        }
+//			     });
+//
+//        }
+        function getContextPath(){
+            var localObj = window.location;
+            var contextPath = localObj.pathname.split("/")[1];
+            return contextPath ;
+        }
+
+        var loginApp=new Vue({
+            el:"#loginApp",
+            data(){
+                return {
+                    fullscreenLoading:false,
+                    flag:true
+                }
+            },
+            mounted(){
+
+            },
+            methods:{
+                login(){
+                    this.fullscreenLoading=true;
+                    console.log(this.fullscreenLoading);
+                    var basePath = "/"+getContextPath();
+                    var user = $("#account").val();
+                    var password = $("#password").val();
+                    let that=this;
+                    $.ajax({
+                        type: "get",
+                        url: basePath+"/loginPost",
+                        async: false,
+                        data: {"USERNAME":user,"PASSWORD":password},
+                        success: function (data)
+                        {
+
+                            if(data.msg == 200){
+                                that.fullscreenLoading=false;
+                                window.location.href=basePath+"/index";
+                            }else if(data.msg == 201){
+                                that.flag=false;
+                                that.fullscreenLoading=false;
+                                that.$confirm('该账户已被禁用！', '提示', {
+                                  confirmButtonText: '确定',
+                                  cancelButtonText: '取消',
+                                  type: 'warning'
+                                }).then(() => {
+                                }).catch(() => {
+                                });
+                            }else if(data.msg == 202){
+                                that.flag=false;
+                                that.fullscreenLoading=false;
+                                that.$confirm('登录成功! 您在其他地方登陆的账户,已被迫下线！', '提示', {
+                                  confirmButtonText: '确定',
+                                  cancelButtonText: '取消',
+                                  type: 'warning'
+                                }).then(() => {
+                                    window.location.href=basePath+"/index";
+                                }).catch(() => {
+                                });
+                            }else{
+                                that.flag=false;
+                                that.fullscreenLoading=false;
+                                that.$alert('<strong style="color:red;">账号或密码错误，请重新输入</strong>', '警告', {
+                                    dangerouslyUseHTMLString: true
+                                });
+                            }
+                        },
+                        error:function(){
+                            that.flag=false;
+                            that.fullscreenLoading=false;
+                            that.$confirm('登录错误，请重试?', '提示', {
+                              confirmButtonText: '确定',
+                              cancelButtonText: '取消',
+                              type: 'warning'
+                            }).then(() => {
+                            }).catch(() => {
+                            });
+                        }
+                     });
+                }
+            }
+        })
+
+    </script>
+</html>

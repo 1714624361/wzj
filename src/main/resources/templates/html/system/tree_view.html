@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>树形控件</title>
+		<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-treeview.css">
+		<script src="bootstrap/js/jquery-2.2.3.min.js" type="text/javascript"></script>
+		<script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+		<script src="bootstrap/js/bootstrap-treeview.js" type="text/javascript"></script>
+	</head>
+	<script type="text/javascript">
+		$(function() {
+			$('#treeview1').treeview({
+	          data: $("#treeviewVal").html(),
+	          showCheckbox : true,
+	          levels:1,
+	          onNodeChecked: function(event, data){
+	        	 //选中父节点，则自动选择子节点
+	        	if(data.nodes != null)
+	        	{
+	        		var arrayInfo = data.nodes;
+	        		for (var i = 0; i < arrayInfo.length; i++) {
+	        			// $('#treeview1').treeview('checkNode', [ arrayInfo[i].nodeId, { silent: true } ]);
+	        			$('#treeview1').treeview('toggleNodeChecked', [ arrayInfo[i].nodeId, { silent: true } ]);
+					}
+	        	}
+			  },
+			  onNodeUnchecked: function(event, data){
+		        	 //取消选中父节点，则自动取消选择子节点
+		        	if(data.nodes != null)
+		        	{
+		        		var arrayInfo = data.nodes;
+		        		for (var i = 0; i < arrayInfo.length; i++) {
+		        			// $('#treeview1').treeview('checkNode', [ arrayInfo[i].nodeId, { silent: true } ]);
+		        			$('#treeview1').treeview('toggleNodeChecked', [ arrayInfo[i].nodeId, { silent: true } ]);
+						}
+		        	}
+				  },
+				onNodeSelected: function(event, data) {
+				
+					alert(data.id+"-"+data.text);
+				}
+	    		});
+			
+			
+			
+		});
+		
+		function dosome( num){
+			if(num == 1)
+			{
+				$('#treeview1').treeview('checkAll', { silent: true });//全选
+			}else if(num == 2){
+				$('#treeview1').treeview('uncheckAll', { silent: true });//取消全选
+			}else if(num == 3){
+				$('#treeview1').treeview('collapseAll', { silent: true });//折叠
+			}else if(num == 4){
+				$('#treeview1').treeview('expandAll', { levels: 2, silent: true });//展开所有二级节点
+			}
+		}
+		function getDisabled(){
+			var checkedArr = $('#treeview1').treeview('getChecked','');
+			var a = "";
+			$.each(checkedArr,function(index,value)
+			{
+				a += value.id + "-"+value.text+",";								
+			});
+			
+			alert(a);
+		}
+		
+		function testSelect()
+		{
+			var checkedArr = $('#treeview1').treeview('getSelected', '');
+			alert(checkedArr[0].id+"-"+checkedArr[0].text);
+		}
+		
+		function testDW()
+		{
+		//	$('#treeview1').treeview('expandAll', { levels: 2, silent: true });//展开所有二级节点
+			
+			$('#treeview1').treeview('expandNode', [ 9, { levels: 1, silent: true } ]);
+			
+		}
+	</script>
+	<body>
+		
+	</body>
+</html>

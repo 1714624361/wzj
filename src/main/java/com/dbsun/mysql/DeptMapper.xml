@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dbsun.mapper.DeptMapper">
+
+	<!-- 新增部门 -->
+	<insert id="saveDept" parameterType="pd" flushCache="false">
+		insert into SYS_DEPT (
+		DEPT_ID,
+		DEPT_NAME,
+		DEPT_PID,
+		<!--DEPT_ORDER, -->
+		DEPT_SEATGROUPID, <!--部门坐席组ID -->
+		DEPT_LAYERORDER
+		) values (
+		#{DEPT_ID},
+		#{DEPT_NAME},
+		#{DEPT_PID},
+		<!--#{DEPT_ORDER},-->
+		#{DEPT_SEATGROUPID},
+		#{DEPT_LAYERORDER}
+    )
+</insert>
+
+<!-- 删除部门 -->
+	<delete id="deleteDept" parameterType="pd" flushCache="false">
+		delete from SYS_DEPT
+		where
+		DEPT_ID = #{DEPT_ID}
+	</delete>
+
+	<!-- 修改部门  只更新部门名称-->
+	<update id="updateDept" parameterType="pd" flushCache="false">
+		update SYS_DEPT
+		set
+		DEPT_NAME = #{DEPT_NAME},
+		DEPT_SEATGROUPID = #{DEPT_SEATGROUPID} <!--部门坐席组ID -->
+		where
+		DEPT_ID 				= #{DEPT_ID}
+	</update>
+	<!-- 通过当前部门查询上级部门的信息 -->
+	<select id="getDeptByPId" parameterType="pd" resultType="pd">
+
+		SELECT
+		*
+		FROM SYS_DEPT d WHERE d.DEPT_ID = #{DEPT_PID} <!--传入父ID查询获取父级数据-->
+
+	</select>
+	<!-- 获取所有部门信息用于树形结构拼接 -->
+	<select id="getDeptAllLst" parameterType="pd" resultType="pd">
+		SELECT
+		*
+		FROM SYS_DEPT d
+	</select>
+
+</mapper>
